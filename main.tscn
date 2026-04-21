@@ -6,6 +6,8 @@
 [ext_resource type="Script" uid="uid://dfadx51dbm004" path="res://Scripts/World/RepairPanel.gd" id="3_7mycd"]
 [ext_resource type="PackedScene" uid="uid://36y031cs4xm1" path="res://Assets/SpaceStationKit/Models/GLB format/wall.glb" id="4_5vw27"]
 [ext_resource type="Script" uid="uid://xmxl2txywm4m" path="res://Scripts/UI/HUD.gd" id="4_272bh"]
+[ext_resource type="PackedScene" uid="uid://ciadsxibpamiu" path="res://Assets/SpaceStationKit/Models/GLB format/wall-window.glb" id="7_5vw27"]
+[ext_resource type="PackedScene" uid="uid://blurex6tvgt5g" path="res://Assets/SpaceStationKit/Models/GLB format/wall-door.glb" id="8_kek77"]
 
 [sub_resource type="Environment" id="Environment_1bvp3"]
 
@@ -20,11 +22,7 @@ size = Vector3(0.2, 3, 20)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_7mycd"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1bvp3"]
-albedo_color = Color(0, 1, 0, 1)
-
 [sub_resource type="BoxMesh" id="BoxMesh_272bh"]
-material = SubResource("StandardMaterial3D_1bvp3")
 size = Vector3(0.5, 1, 0.1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_5vw27"]
@@ -73,6 +71,27 @@ transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, -0.007, 0, 0)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Sol" unique_id=380679851]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3009119, 0)
 shape = SubResource("BoxShape3D_lquwl")
+
+[node name="MurSud" type="StaticBody3D" parent="." unique_id=154342256]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MurSud" unique_id=54996286]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4833546, 4.8958254)
+shape = SubResource("BoxShape3D_7mycd")
+
+[node name="wall-window3" parent="MurSud" unique_id=507275491 instance=ExtResource("7_5vw27")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 1, -3.5451038, -0.0717141, 4.8697963)
+
+[node name="wall3" parent="MurSud/wall-window3" unique_id=1882905919 instance=ExtResource("4_5vw27")]
+transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 1, 1.642724, 0, 0.006000042)
+
+[node name="wall2" parent="MurSud/wall-window3" unique_id=1738192725 instance=ExtResource("4_5vw27")]
+transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 1, 0.7496921, 0, 0.006000042)
+
+[node name="wall-door2" parent="MurSud/wall-window3" unique_id=2001245277 instance=ExtResource("8_kek77")]
+transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 1, 1.1981237, -0.0087047815, 0.00573349)
+
+[node name="wall-window2" parent="MurSud/wall-window3" unique_id=836276266 instance=ExtResource("7_5vw27")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.3478043, -0.004999995, 0.007032156)
 
 [node name="MurNord" type="StaticBody3D" parent="." unique_id=2144188456]
 
