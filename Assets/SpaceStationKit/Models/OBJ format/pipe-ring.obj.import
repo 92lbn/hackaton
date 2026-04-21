@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://br7t2glfo2cgi"
+path="res://.godot/imported/pipe-ring.obj-fe68373f3b30a9bc4e2ea0a45a9bedf4.mesh"
+
+[deps]
+
+files=["res://.godot/imported/pipe-ring.obj-fe68373f3b30a9bc4e2ea0a45a9bedf4.mesh"]
+
+source_file="res://Assets/SpaceStationKit/Models/OBJ format/pipe-ring.obj"
+dest_files=["res://.godot/imported/pipe-ring.obj-fe68373f3b30a9bc4e2ea0a45a9bedf4.mesh", "res://.godot/imported/pipe-ring.obj-fe68373f3b30a9bc4e2ea0a45a9bedf4.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=true
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+force_disable_mesh_compression=false

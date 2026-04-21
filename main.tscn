@@ -68,13 +68,13 @@ shape = SubResource("BoxShape3D_lquwl")
 script = ExtResource("2_lquwl")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Player" unique_id=172895622]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.0819788)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.74776727, 2.0819788)
 shape = SubResource("CapsuleShape3D_7mycd")
 
 [node name="Head" type="Node3D" parent="Player" unique_id=1548328494]
 
 [node name="Camera3D" type="Camera3D" parent="Player/Head" unique_id=733623158]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.11225885, 2.0924134)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8451069, 2.0924134)
 current = true
 
 [node name="Panel0" type="Area3D" parent="." unique_id=135950027]
