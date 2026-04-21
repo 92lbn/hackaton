@@ -116,7 +116,9 @@ func _parse_message(msg: String) -> void:
 		"joy":        emit_signal("data_received", "joy",        parts[1])
 		"piezo":      emit_signal("data_received", "piezo",      parts[1])
 		"rfid":       emit_signal("data_received", "rfid",       parts[1])
-		"button":     emit_signal("button_changed", parts[1] == "1")
+		"button":
+				emit_signal("button_changed", parts[1] == "1")
+				emit_signal("data_received", "button", parts[1])
 		"pong":       print("[Arduino] Latence : ", Time.get_ticks_msec() - parts[1].to_int(), " ms")
 		"ack":        print("[Arduino] Ack : ", parts[1])
 		_:            pass

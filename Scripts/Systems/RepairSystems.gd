@@ -11,6 +11,7 @@ signal electric_updated(hits: int, needed: int)
 signal door_updated(progress: float)
 signal repair_flashed(system_id: int)
 
+
 # ── Variables Arduino ──────────────────────────────────
 var arduino_joy:         Vector2 = Vector2(0.5, 0.5)  # Joystick X,Y (0-1)
 var _arduino_pot_rot:    float   = 0.5                 # Potentiomètre rotatif (0-1)
@@ -26,6 +27,10 @@ var signal_target  := Vector2(0.5, 0.3)
 var signal_lock    := 0.0
 var electric_hits  := 0;    var electric_cool  := 0.0
 var door_hold      := 0.0
+var _arduino_button: bool = false
+
+var signal_hits: int = 0
+var signal_cool: float = 0.0
 
 var _launch_waiting := false
 var _launch_system  := -1
@@ -56,6 +61,7 @@ func _process(delta: float) -> void:
 		print("  slider       : ", _arduino_pot_slider)
 		print("  piezo        : ", _arduino_piezo)
 		print("  rfid         : ", _arduino_rfid)
+		print("  button       : ", _arduino_button)  # ← ajoute cette ligne
 		print("  reactor_val  : ", reactor_value, " / cible : ", reactor_target)
 		print("  oxygen_pos   : ", oxygen_pos)
 		print("  signal_angle : ", signal_angle, " / cible : ", signal_target)
@@ -103,21 +109,17 @@ func _oxygen(delta: float) -> void:
 # Orienter vers la cible avec le joystick
 func _signal_sys(delta: float) -> void:
 	if not _active(2): return
-	var jx := (arduino_joy.x - 0.5) * 2.0
-	var jy := (arduino_joy.y - 0.5) * 2.0
-	if abs(jx) < 0.15: jx = 0.0
-	if abs(jy) < 0.15: jy = 0.0
-	signal_angle = (signal_angle + Vector2(jx, jy) * 1.8 * delta).clamp(
-		Vector2(-1, -1), Vector2(1, 1)
-	)
-	emit_signal("signal_updated", signal_angle, signal_target)
-	if signal_angle.distance_to(signal_target) < 0.22:
-		signal_lock += delta
-		if signal_lock >= 1.2:
-			signal_lock = 0.0
+	signal_cool = maxf(signal_cool - delta, 0.0)
+	if _arduino_button and signal_cool <= 0:
+		_arduino_button = false
+		signal_hits += 1
+		signal_cool = 0.5
+		emit_signal("signal_updated", Vector2(signal_hits, 0), Vector2(3, 0))
+		if signal_hits >= 3:
+			signal_hits = 0
 			_repair(2)
 	else:
-		signal_lock = maxf(signal_lock - delta, 0.0)
+		emit_signal("signal_updated", Vector2(signal_hits, 0), Vector2(3, 0))
 
 # ══ ÉLECTRIQUE — Piézo ════════════════════════════════
 # Taper 3 fois fort sur le piézo
@@ -199,3 +201,6 @@ func _on_arduino_data(key: String, value: String) -> void:
 		"rfid":
 			if value == "1":
 				_arduino_rfid = true
+		"button":
+			if value == "1":
+				_arduino_button = true

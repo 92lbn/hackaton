@@ -76,6 +76,8 @@ func start_game() -> void:
 		_cascade_timers[s] = 0.0
 		_degrade_timers[s] = 0.0
 	emit_signal("failure_count_changed", 0)
+	
+	#_set_state(0, State.WARNING)  # 0 = VENTILATION
 
 func _process(delta: float) -> void:
 	if not _running: return

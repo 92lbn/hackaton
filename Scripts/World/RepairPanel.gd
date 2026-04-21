@@ -4,7 +4,6 @@
 # Enfants : MeshInstance3D, CollisionShape3D, SpotLight3D
 # ============================================================
 extends Area3D
-
 @export var system_id: int = 0
 
 @onready var light: SpotLight3D = get_node_or_null("SpotLight3D")

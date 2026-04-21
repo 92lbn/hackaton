@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="le jeu du temps"
-run/main_scene="uid://cia1amr4a0xl2"
+run/main_scene="uid://bipv7xhdq3w0k"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 

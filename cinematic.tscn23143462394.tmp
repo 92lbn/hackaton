@@ -1,0 +1,64 @@
+[gd_scene format=3 uid="uid://bipv7xhdq3w0k"]
+
+[ext_resource type="Script" uid="uid://0p1rqw0tvmfr" path="res://Script_cine/Cinematic.gd" id="1_oe414"]
+
+[node name="Cinematic" type="Node3D" unique_id=1833732185]
+script = ExtResource("1_oe414")
+
+[node name="CinematicCamera" type="Camera3D" parent="." unique_id=1798251328]
+
+[node name="LightMain" type="DirectionalLight3D" parent="." unique_id=1144936357]
+
+[node name="LightGreen" type="OmniLight3D" parent="." unique_id=929522189]
+
+[node name="LightViolet" type="OmniLight3D" parent="." unique_id=1458936441]
+
+[node name="SporeParticles" type="GPUParticles3D" parent="." unique_id=1952476782]
+
+[node name="Mushrooms" type="Node3D" parent="." unique_id=736520488]
+
+[node name="Mushroom0" type="MeshInstance3D" parent="Mushrooms" unique_id=1702521653]
+
+[node name="Mushroom1" type="MeshInstance3D" parent="Mushrooms" unique_id=749379920]
+
+[node name="Mushroom2" type="MeshInstance3D" parent="Mushrooms" unique_id=265577465]
+
+[node name="Mushroom3" type="MeshInstance3D" parent="Mushrooms" unique_id=1972544320]
+
+[node name="Mushroom4" type="MeshInstance3D" parent="Mushrooms" unique_id=36810557]
+
+[node name="Mushroom5" type="MeshInstance3D" parent="Mushrooms" unique_id=1831613200]
+
+[node name="Mushroom6" type="MeshInstance3D" parent="Mushrooms" unique_id=877379492]
+
+[node name="Mushroom7" type="MeshInstance3D" parent="Mushrooms" unique_id=1083464790]
+
+[node name="Mushroom8" type="MeshInstance3D" parent="Mushrooms" unique_id=1466068992]
+
+[node name="Mushroom9" type="MeshInstance3D" parent="Mushrooms" unique_id=362866915]
+
+[node name="Mushroom10" type="MeshInstance3D" parent="Mushrooms" unique_id=1277297682]
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=1888906072]
+
+[node name="Vignette" type="ColorRect" parent="HUD" unique_id=667667473]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="TextPanel" type="Panel" parent="HUD" unique_id=2240684]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="HUD/TextPanel" unique_id=1120923929]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="StartPanel" type="Panel" parent="HUD" unique_id=440522662]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="StartButton" type="Button" parent="HUD/StartPanel" unique_id=194066689]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0

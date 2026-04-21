@@ -19,10 +19,10 @@ const CCRT := Color(0.95, 0.15, 0.1)
 @onready var launch_pnl:   Panel       = $LaunchPanel
 @onready var launch_lbl:   Label       = $LaunchPanel/Action
 @onready var launch_bar:   ProgressBar = $LaunchPanel/Bar
-@onready var repair_pnl:   Panel       = $RepairPanel
-@onready var repair_title: Label       = $RepairPanel/Title
-@onready var repair_status:Label       = $RepairPanel/Status
-@onready var repair_widget:Control     = $RepairPanel/Widget
+@onready var repair_pnl:    Panel = $RepairPanel
+@onready var repair_title:  Label          = $RepairPanel/MarginContainer/VBoxContainer/Title
+@onready var repair_status: Label          = $RepairPanel/MarginContainer/VBoxContainer/Status
+@onready var repair_widget: Control  = $RepairPanel/MarginContainer/VBoxContainer/Widget
 
 @onready var repair_sys: Node = get_node_or_null("../RepairSystems")
 
@@ -99,8 +99,10 @@ func hide_panel() -> void:
 	approach_lbl.text  = ""
 
 func _refresh_panel() -> void:
+	
 	if _cur_system == -1: return
 	var failing: bool = GameManager.is_system_failing(_cur_system)
+	print("REFRESH panel=", _cur_system, " failing=", failing, " state=", GameManager.get_state(_cur_system))
 	repair_pnl.visible = failing
 	if not failing:
 		approach_lbl.text = "NOMINAL"
@@ -109,6 +111,13 @@ func _refresh_panel() -> void:
 		var s: int = GameManager.get_state(_cur_system)
 		repair_status.text     = "PANNE" if s == 1 else "CRITIQUE"
 		repair_status.modulate = CWRN   if s == 1 else CCRT
+		# Forcer l'affichage du bon widget selon le système
+		match _cur_system:
+			0: repair_widget.get_node_or_null("Info").text = "TOURNER LE POTENTIOMETRE" if repair_widget.get_node_or_null("Info") else ""
+			1: repair_widget.get_node_or_null("Info").text = "GLISSER LE SLIDER" if repair_widget.get_node_or_null("Info") else ""
+			2: repair_widget.get_node_or_null("Info").text = "APPUYER SUR LE BOUTON JOYSTICK"
+			3: repair_widget.get_node_or_null("Info").text = "TAPER SUR LE PIEZO" if repair_widget.get_node_or_null("Info") else ""
+			4: repair_widget.get_node_or_null("Info").text = "SCANNER LE BADGE" if repair_widget.get_node_or_null("Info") else ""
 
 # ══ TIMER ═════════════════════════════════════════════
 func _on_timer(t: float) -> void:
@@ -149,12 +158,14 @@ func _on_game_over(reason: String) -> void:
 # ══ WIDGETS DE RÉPARATION ═════════════════════════════
 func _reactor_ui(cur: float, tgt: float) -> void:
 	if _cur_system != 0: return
-	var bar: ProgressBar = repair_widget.get_node_or_null("Bar")
-	var lbl: Label       = repair_widget.get_node_or_null("Info")
-	if bar: bar.value    = cur * 100
-	if lbl: lbl.text     = "CIBLE : %.0f%%\nTOURNER LE POTENTIOMETRE" % (tgt * 100)
-	var d: float = abs(cur - tgt)
-	if bar: bar.modulate = COK if d < 0.06 else CWRN if d < 0.2 else CCRT
+	var bar:     ProgressBar = repair_widget.get_node_or_null("Bar")
+	var bar_lbl: Label       = repair_widget.get_node_or_null("BarLabel")
+	var info:    Label       = repair_widget.get_node_or_null("Info")
+	if bar:     bar.value    = cur * 100
+	if bar_lbl: bar_lbl.text = "Actuel : %.0f%%   Cible : %.0f%%" % [cur*100, tgt*100]
+	var d : float = abs(cur - tgt)
+	if bar:  bar.modulate    = COK if d < 0.06 else CWRN if d < 0.2 else CCRT
+	if info: info.text       = "✅ DANS LA ZONE !" if d < 0.06 else "TOURNER LE POTENTIOMETRE"
 
 func _oxygen_ui(pos: float) -> void:
 	if _cur_system != 1: return
@@ -168,10 +179,11 @@ func _oxygen_ui(pos: float) -> void:
 func _signal_ui(cur: Vector2, tgt: Vector2) -> void:
 	if _cur_system != 2: return
 	var lbl: Label = repair_widget.get_node_or_null("Info")
-	var d := cur.distance_to(tgt)
+	var hits: int = int(cur.x)
+	var needed: int = int(tgt.x)
 	if lbl:
-		lbl.text     = "SIGNAL VERROUILLE" if d < 0.22 else "PROCHE...\nORIENTER LE JOYSTICK" if d < 0.5 else "CHERCHER\nORIENTER LE JOYSTICK"
-		lbl.modulate = COK if d < 0.22 else CWRN if d < 0.5 else Color.WHITE
+		lbl.text     = "APPUIS : %d / %d\nAPPUYER SUR LE BOUTON JOYSTICK" % [hits, needed]
+		lbl.modulate = COK if hits >= needed else Color.WHITE
 
 func _electric_ui(hits: int, needed: int) -> void:
 	if _cur_system != 3: return
