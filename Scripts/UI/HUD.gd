@@ -26,10 +26,19 @@ const CCRT := Color(0.95,0.15,0.1)
 
 @onready var repair_sys: Node = get_node_or_null("../RepairSystems")
 
+var _arduino_pot_rot:    float   = 0.5
+var _arduino_pot_slider: float   = 0.5
+var _arduino_joy:        Vector2 = Vector2(0.5, 0.5)
+var _arduino_piezo:      bool    = false
+var _arduino_rfid:       bool    = false
+
 var _cur_system := -1
 var _evt_timer  := 0.0
 
 func _ready() -> void:
+	ArduinoManager.connect("arduino_connected",    _on_arduino_connected)
+	ArduinoManager.connect("arduino_disconnected", _on_arduino_disconnected)
+	ArduinoManager.connect("pairing_failed",       _on_pairing_failed)
 	GameManager.connect("system_state_changed", _on_state)
 	GameManager.connect("timer_updated",        _on_timer)
 	GameManager.connect("failure_count_changed",_on_failures)
@@ -38,7 +47,9 @@ func _ready() -> void:
 	GameManager.connect("game_won",             func(): win_pnl.visible = true; launch_pnl.visible = false)
 	GameManager.connect("launch_sequence_started", func(): launch_pnl.visible = true; event_lbl.text = "SEQUENCE DE LANCEMENT")
 	GameManager.connect("launch_step_required", func(i,a): launch_lbl.text = "ETAPE %d/5\n%s"%[i+1,a]; launch_bar.value = i*20)
-
+	if Engine.has_singleton("ArduinoManager") or get_node_or_null("/root/ArduinoManager"):
+		ArduinoManager.connect("data_received", _on_arduino_data)
+		print("[RepairSystems] Arduino connecté !")
 	if repair_sys:
 		repair_sys.connect("reactor_updated",  _reactor_ui)
 		repair_sys.connect("oxygen_updated",   _oxygen_ui)
@@ -52,6 +63,39 @@ func _ready() -> void:
 	repair_pnl.visible= false
 	approach_lbl.text = ""
 
+func _on_arduino_connected() -> void:
+	event_lbl.text     = "🎛️ MANETTE CONNECTEE !"
+	event_lbl.modulate = COK
+	_evt_timer = 3.0
+
+func _on_arduino_disconnected() -> void:
+	event_lbl.text     = "⚠️ MANETTE DECONNECTEE"
+	event_lbl.modulate = CCRT
+	_evt_timer = 999.0
+
+func _on_pairing_failed() -> void:
+	event_lbl.text     = "🔌 BRANCHER LA MANETTE..."
+	event_lbl.modulate = CWRN
+	_evt_timer = 999.0
+
+func _on_arduino_data(key: String, value: String) -> void:
+	match key:
+		"pot_rot":
+			_arduino_pot_rot = clampf(value.to_float() / 1023.0, 0.0, 1.0)
+		"pot_slider":
+			_arduino_pot_slider = clampf(value.to_float() / 1023.0, 0.0, 1.0)
+		"joy":
+			var parts := value.split(",")
+			if parts.size() == 2:
+				_arduino_joy = Vector2(
+					clampf(parts[0].to_float() / 1023.0, 0.0, 1.0),
+					clampf(parts[1].to_float() / 1023.0, 0.0, 1.0)
+				)
+		"piezo":
+			if value.to_int() > 300:
+				_arduino_piezo = true
+		"rfid":
+			_arduino_rfid = (value == "1")
 # ============================================================
 func _process(delta: float) -> void:
 	if _evt_timer > 0:
