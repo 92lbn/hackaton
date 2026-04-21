@@ -17,8 +17,8 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-GameManager="*uid://cq22vff03v1al"
-ArduinoManager="*uid://b5243xg4c8rsy"
+GameManager="*uid://c0v0d6g0bby3m"
+ArduinoManager="*uid://ro7tjgadgqtq"
 
 [display]
 

@@ -1,0 +1,610 @@
+[gd_scene format=3 uid="uid://cia1amr4a0xl2"]
+
+[ext_resource type="Script" uid="uid://u3llt5jv7wvd" path="res://Scripts/Systems/RepairSystems.gd" id="1_1bvp3"]
+
+[sub_resource type="Environment" id="Environment_1bvp3"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lquwl"]
+size = Vector3(10, 0.1, 10)
+
+[sub_resource type="GDScript" id="GDScript_ig7tw"]
+script/source = "# ============================================================
+# Player.gd — Mouvement via joystick Arduino
+# Nœud : CharacterBody3D + groupe \"player\"
+# ============================================================
+extends CharacterBody3D
+
+const SPEED   := 5.0
+const GRAVITY := 9.8
+const SENS    := 0.002
+
+@onready var head:       Node3D = $Head
+@onready var repair_sys: Node   = get_node_or_null(\"/root/Main/RepairSystems\")
+
+var _active := false
+
+func _ready() -> void:
+	GameManager.connect(\"game_over\", func(_r): _stop())
+	GameManager.connect(\"game_won\",  func():   _stop())
+
+func activate() -> void:
+	_active = true
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
+func _stop() -> void:
+	_active = false
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+
+func _input(event: InputEvent) -> void:
+	# Rotation caméra avec la souris
+	if event is InputEventMouseMotion and _active:
+		rotate_y(-event.relative.x * SENS)
+		head.rotate_x(-event.relative.y * SENS)
+		head.rotation.x = clampf(head.rotation.x, -1.4, 1.4)
+	# Échap pour libérer la souris
+	if event.is_action_pressed(\"ui_cancel\"):
+		Input.set_mouse_mode(
+			Input.MOUSE_MODE_VISIBLE if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED
+			else Input.MOUSE_MODE_CAPTURED
+		)
+
+func _physics_process(delta: float) -> void:
+	if not _active: return
+	if not is_on_floor(): velocity.y -= GRAVITY * delta
+
+	var dir := Vector3.ZERO
+
+	if repair_sys:
+		# Joystick Arduino → déplacement
+		var joy: Vector2 = repair_sys.arduino_joy
+		var jx := (joy.x - 0.5) * 2.0
+		var jy := (joy.y - 0.5) * 2.0
+		# Zone morte
+		if abs(jx) < 0.15: jx = 0.0
+		if abs(jy) < 0.15: jy = 0.0
+		dir = (transform.basis * Vector3(jx, 0, jy)).normalized()
+		dir.y = 0
+
+	velocity.x = dir.x * SPEED
+	velocity.z = dir.z * SPEED
+	move_and_slide()
+"
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_7mycd"]
+
+[sub_resource type="GDScript" id="GDScript_0xm2m"]
+script/source = "# ============================================================
+# RepairPanel.gd
+# Nœud : Area3D
+# Enfants : MeshInstance3D, CollisionShape3D, SpotLight3D
+# ============================================================
+extends Area3D
+
+@export var system_id: int = 0
+
+@onready var light: SpotLight3D = get_node_or_null(\"SpotLight3D\")
+@onready var mesh:  MeshInstance3D = get_node_or_null(\"MeshInstance3D\")
+
+func _ready() -> void:
+	connect(\"body_entered\", _on_enter)
+	connect(\"body_exited\",  _on_exit)
+	GameManager.connect(\"system_state_changed\", _on_state)
+	_update_light(GameManager.State.OK)
+
+func _on_enter(body: Node3D) -> void:
+	if body.is_in_group(\"player\"):
+		var hud = get_node_or_null(\"/root/Main/HUD\")
+		if hud: hud.show_panel(system_id)
+
+func _on_exit(body: Node3D) -> void:
+	if body.is_in_group(\"player\"):
+		var hud = get_node_or_null(\"/root/Main/HUD\")
+		if hud: hud.hide_panel()
+
+func _on_state(id: int, state: int) -> void:
+	if id == system_id: _update_light(state)
+
+func _update_light(state: int) -> void:
+	if not light: return
+	match state:
+		GameManager.State.OK:       light.light_color = Color(0, 1, 0.3);  light.light_energy = 1.0
+		GameManager.State.WARNING:  light.light_color = Color(1, 0.6, 0);  light.light_energy = 2.5
+		GameManager.State.CRITICAL: light.light_color = Color(1, 0.1, 0.1);light.light_energy = 4.0
+"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1bvp3"]
+albedo_color = Color(0, 1, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_272bh"]
+material = SubResource("StandardMaterial3D_1bvp3")
+size = Vector3(0.5, 1, 0.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5vw27"]
+size = Vector3(2, 2, 2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_kek77"]
+size = Vector3(0.5, 1, 0.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4c57u"]
+size = Vector3(2, 2, 2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_efxa6"]
+size = Vector3(0.5, 1, 0.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_dg77c"]
+size = Vector3(2, 2, 2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ycdy4"]
+size = Vector3(0.5, 1, 0.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_w48qg"]
+size = Vector3(2, 2, 2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_vivmo"]
+size = Vector3(0.5, 1, 0.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2cqfq"]
+size = Vector3(2, 2, 2)
+
+[sub_resource type="GDScript" id="GDScript_h2yge"]
+script/source = "# ============================================================
+# HUD.gd — Nœud : CanvasLayer
+# ============================================================
+extends CanvasLayer
+
+const COK  := Color(0,0.85,0.3)
+const CWRN := Color(0.95,0.75,0)
+const CCRT := Color(0.95,0.15,0.1)
+
+@onready var timer_lbl:   Label       = $TimerLabel
+@onready var alert_lbl:   Label       = $AlertLabel
+@onready var event_lbl:   Label       = $EventLabel
+@onready var start_pnl:   Panel       = $StartPanel
+@onready var go_pnl:      Panel       = $GameOverPanel
+@onready var go_reason:   Label       = $GameOverPanel/Reason
+@onready var win_pnl:     Panel       = $WinPanel
+@onready var launch_pnl:  Panel       = $LaunchPanel
+@onready var launch_lbl:  Label       = $LaunchPanel/Action
+@onready var launch_bar:  ProgressBar = $LaunchPanel/Bar
+@onready var repair_pnl:  Panel       = $RepairPanel
+@onready var repair_title:Label       = $RepairPanel/Title
+@onready var repair_status:Label      = $RepairPanel/Status
+@onready var repair_widget:Control    = $RepairPanel/Widget
+@onready var approach_lbl:Label       = $ApproachLabel
+@onready var panne_lbl:Label          = $PanneLabel
+
+@onready var repair_sys: Node = get_node_or_null(\"../RepairSystems\")
+
+var _arduino_pot_rot:    float   = 0.5
+var _arduino_pot_slider: float   = 0.5
+var _arduino_joy:        Vector2 = Vector2(0.5, 0.5)
+var _arduino_piezo:      bool    = false
+var _arduino_rfid:       bool    = false
+
+var _cur_system := -1
+var _evt_timer  := 0.0
+
+func _ready() -> void:
+	ArduinoManager.connect(\"arduino_connected\",    _on_arduino_connected)
+	ArduinoManager.connect(\"arduino_disconnected\", _on_arduino_disconnected)
+	ArduinoManager.connect(\"pairing_failed\",       _on_pairing_failed)
+	GameManager.connect(\"system_state_changed\", _on_state)
+	GameManager.connect(\"timer_updated\",        _on_timer)
+	GameManager.connect(\"failure_count_changed\",_on_failures)
+	GameManager.connect(\"event_triggered\",      _on_event)
+	GameManager.connect(\"game_over\",            _on_game_over)
+	GameManager.connect(\"game_won\",             func(): win_pnl.visible = true; launch_pnl.visible = false)
+	GameManager.connect(\"launch_sequence_started\", func(): launch_pnl.visible = true; event_lbl.text = \"SEQUENCE DE LANCEMENT\")
+	GameManager.connect(\"launch_step_required\", func(i,a): launch_lbl.text = \"ETAPE %d/5\\n%s\"%[i+1,a]; launch_bar.value = i*20)
+	if Engine.has_singleton(\"ArduinoManager\") or get_node_or_null(\"/root/ArduinoManager\"):
+		ArduinoManager.connect(\"data_received\", _on_arduino_data)
+		print(\"[RepairSystems] Arduino connecté !\")
+	if repair_sys:
+		repair_sys.connect(\"reactor_updated\",  _reactor_ui)
+		repair_sys.connect(\"oxygen_updated\",   _oxygen_ui)
+		repair_sys.connect(\"signal_updated\",   _signal_ui)
+		repair_sys.connect(\"electric_updated\", _electric_ui)
+		repair_sys.connect(\"door_updated\",     _door_ui)
+
+	go_pnl.visible    = false
+	win_pnl.visible   = false
+	launch_pnl.visible= false
+	repair_pnl.visible= false
+	approach_lbl.text = \"\"
+
+func _on_arduino_connected() -> void:
+	event_lbl.text     = \"🎛️ MANETTE CONNECTEE !\"
+	event_lbl.modulate = COK
+	_evt_timer = 3.0
+
+func _on_arduino_disconnected() -> void:
+	event_lbl.text     = \"⚠️ MANETTE DECONNECTEE\"
+	event_lbl.modulate = CCRT
+	_evt_timer = 999.0
+
+func _on_pairing_failed() -> void:
+	event_lbl.text     = \"🔌 BRANCHER LA MANETTE...\"
+	event_lbl.modulate = CWRN
+	_evt_timer = 999.0
+
+func _on_arduino_data(key: String, value: String) -> void:
+	match key:
+		\"pot_rot\":
+			_arduino_pot_rot = clampf(value.to_float() / 1023.0, 0.0, 1.0)
+		\"pot_slider\":
+			_arduino_pot_slider = clampf(value.to_float() / 1023.0, 0.0, 1.0)
+		\"joy\":
+			var parts := value.split(\",\")
+			if parts.size() == 2:
+				_arduino_joy = Vector2(
+					clampf(parts[0].to_float() / 1023.0, 0.0, 1.0),
+					clampf(parts[1].to_float() / 1023.0, 0.0, 1.0)
+				)
+		\"piezo\":
+			if value.to_int() > 300:
+				_arduino_piezo = true
+		\"rfid\":
+			_arduino_rfid = (value == \"1\")
+# ============================================================
+func _process(delta: float) -> void:
+	if _evt_timer > 0:
+		_evt_timer -= delta
+		event_lbl.modulate.a = clampf(_evt_timer / 2.0, 0, 1)
+
+# ============================================================
+# Appelé par RepairPanel.gd
+# ============================================================
+func show_panel(id: int) -> void:
+	_cur_system = id
+	var names := [\"REACTEUR\",\"OXYGENE\",\"SIGNAL\",\"ELECTRIQUE\",\"PORTES\"]
+	repair_title.text = names[id]
+	_refresh_panel()
+
+func hide_panel() -> void:
+	_cur_system = -1
+	repair_pnl.visible  = false
+	approach_lbl.text   = \"\"
+
+func _refresh_panel() -> void:
+	if _cur_system == -1: return
+	var failing := GameManager.is_system_failing(_cur_system)
+	repair_pnl.visible = failing
+	if not failing:
+		approach_lbl.text = \"✅ NOMINAL — rien a faire\"
+	else:
+		approach_lbl.text = \"\"
+		var s := GameManager.get_state(_cur_system)
+		repair_status.text    = \"PANNE\" if s == GameManager.State.WARNING else \"CRITIQUE\"
+		repair_status.modulate= CWRN   if s == GameManager.State.WARNING else CCRT
+
+# ============================================================
+func _on_timer(t: float) -> void:
+	var m := int(t)/60; var s := int(t)%60
+	timer_lbl.text     = \"%02d:%02d\" % [m, s]
+	timer_lbl.modulate = CCRT if t < 20 else CWRN if t < 45 else Color.WHITE
+
+func _on_failures(n: int) -> void:
+	match n:
+		0: alert_lbl.text = \"\"
+		1: alert_lbl.text = \"1 SYSTEME EN PANNE\";   alert_lbl.modulate = CWRN
+		2: alert_lbl.text = \"2 SYSTEMES — DANGER\";  alert_lbl.modulate = Color.ORANGE
+		_: alert_lbl.text = \"SURCHARGE IMMINENTE\";  alert_lbl.modulate = CCRT
+
+func _on_event(txt: String) -> void:
+	event_lbl.text = txt; event_lbl.modulate = Color.WHITE; _evt_timer = 4.0
+
+func _on_state(id: int, state: int) -> void:
+	if state == GameManager.State.WARNING or state == GameManager.State.CRITICAL:
+		var nom: String = GameManager.SYSTEM_NAMES.get(id, \"SYSTEME\")
+		panne_lbl.text     = \"⚠️ \" + nom + \" EN PANNE — ALLEZ REPARER !\"
+		panne_lbl.modulate = CWRN if state == GameManager.State.WARNING else CCRT
+	elif state == GameManager.State.OK:
+		panne_lbl.text     = \"✅ \" + GameManager.SYSTEM_NAMES.get(id, \"\") + \" REPARE !\"
+		panne_lbl.modulate = COK
+	if id == _cur_system:
+		_refresh_panel()
+
+func _on_game_over(reason: String) -> void:
+	go_pnl.visible    = true
+	launch_pnl.visible= false
+	go_reason.text    = reason
+
+# ============================================================
+# Widgets de réparation (dans $RepairPanel/Widget)
+# Le widget change selon le système actif
+# ============================================================
+func _reactor_ui(cur: float, tgt: float) -> void:
+	if _cur_system != 0: return
+	var bar: ProgressBar = repair_widget.get_node_or_null(\"Bar\")
+	var lbl: Label       = repair_widget.get_node_or_null(\"Info\")
+	if bar: bar.value    = cur * 100
+	if lbl: lbl.text     = \"CIBLE : %.0f%%\\n+/- pour regler\" % (tgt * 100)
+	var d: float = abs(cur - tgt)
+	if bar: bar.modulate = COK if d < 0.06 else CWRN if d < 0.2 else CCRT
+
+func _oxygen_ui(pos: float) -> void:
+	if _cur_system != 1: return
+	var bar: ProgressBar = repair_widget.get_node_or_null(\"Bar\")
+	var lbl: Label       = repair_widget.get_node_or_null(\"Info\")
+	if bar: bar.value    = (pos + 1.0) / 2.0 * 100
+	var ok: bool = abs(pos) < 0.15
+	if bar: bar.modulate = COK if ok else CCRT
+	if lbl: lbl.text     = \"ZONE VERTE\" if ok else \"HORS ZONE\\n← → pour centrer\"
+
+func _signal_ui(cur: Vector2, tgt: Vector2) -> void:
+	if _cur_system != 2: return
+	var lbl: Label = repair_widget.get_node_or_null(\"Info\")
+	var d := cur.distance_to(tgt)
+	if lbl:
+		lbl.text     = \"SIGNAL VERROUILLE\" if d < 0.22 else \"PROCHE...\\nWASD\" if d < 0.5 else \"CHERCHER\\nWASD\"
+		lbl.modulate = COK if d < 0.22 else CWRN if d < 0.5 else Color.WHITE
+
+func _electric_ui(hits: int, needed: int) -> void:
+	if _cur_system != 3: return
+	var lbl: Label = repair_widget.get_node_or_null(\"Info\")
+	if lbl: lbl.text = \"FRAPPES : %d / %d\\n[ESPACE]\" % [hits, needed]
+
+func _door_ui(progress: float) -> void:
+	if _cur_system != 4: return
+	var bar: ProgressBar = repair_widget.get_node_or_null(\"Bar\")
+	var lbl: Label       = repair_widget.get_node_or_null(\"Info\")
+	if bar: bar.value    = progress * 100
+	if lbl: lbl.text     = \"MAINTENIR [R]\\n%.0f%%\" % (progress * 100)
+
+# ============================================================
+func _on_start_pressed() -> void:
+	print(\"BOUTON CLIQUE !\")
+	start_pnl.visible = false
+	var player := get_node_or_null(\"../Player\")
+	if player: player.activate()
+	GameManager.start_game()
+
+func _on_restart_pressed() -> void:
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	get_tree().reload_current_scene()
+"
+
+[node name="Main" type="Node3D" unique_id=1698107860]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1867430942]
+environment = SubResource("Environment_1bvp3")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1724132746]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.14184701, 5.3282466)
+
+[node name="RepairSystems" type="Node" parent="." unique_id=450211642]
+script = ExtResource("1_1bvp3")
+
+[node name="Sol" type="StaticBody3D" parent="." unique_id=198086153]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Sol" unique_id=210491501]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Sol" unique_id=380679851]
+shape = SubResource("BoxShape3D_lquwl")
+
+[node name="Player" type="CharacterBody3D" parent="." unique_id=433849745 groups=["player"]]
+script = SubResource("GDScript_ig7tw")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player" unique_id=172895622]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.0819788)
+shape = SubResource("CapsuleShape3D_7mycd")
+
+[node name="Head" type="Node3D" parent="Player" unique_id=1548328494]
+
+[node name="Camera3D" type="Camera3D" parent="Player/Head" unique_id=733623158]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.11225885, 2.0924134)
+current = true
+
+[node name="Panel0" type="Area3D" parent="." unique_id=135950027]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1, 0)
+script = SubResource("GDScript_0xm2m")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Panel0" unique_id=675304312]
+mesh = SubResource("BoxMesh_272bh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Panel0" unique_id=1192184269]
+shape = SubResource("BoxShape3D_5vw27")
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Panel0" unique_id=2067154626]
+
+[node name="Label3D" type="Label3D" parent="Panel0" unique_id=1278014720]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.22387886)
+text = "VENTILATION"
+
+[node name="Panel1" type="Area3D" parent="." unique_id=271323305]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1, 0)
+script = SubResource("GDScript_0xm2m")
+system_id = 1
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Panel1" unique_id=1955474611]
+mesh = SubResource("BoxMesh_kek77")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Panel1" unique_id=919548084]
+shape = SubResource("BoxShape3D_4c57u")
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Panel1" unique_id=1937650461]
+
+[node name="Label3D" type="Label3D" parent="Panel1" unique_id=423013547]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.11262488, 0, 0.22387886)
+text = "TEMPERATURE"
+
+[node name="Panel2" type="Area3D" parent="." unique_id=1419676928]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+script = SubResource("GDScript_0xm2m")
+system_id = 2
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Panel2" unique_id=1652321969]
+mesh = SubResource("BoxMesh_efxa6")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Panel2" unique_id=1395455718]
+shape = SubResource("BoxShape3D_dg77c")
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Panel2" unique_id=1638852469]
+
+[node name="Label3D" type="Label3D" parent="Panel2" unique_id=74557026]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.010844231, 0, 0.22387886)
+text = "Lumières UV"
+
+[node name="Panel3" type="Area3D" parent="." unique_id=450441752]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1, 0)
+script = SubResource("GDScript_0xm2m")
+system_id = 3
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Panel3" unique_id=1060923440]
+mesh = SubResource("BoxMesh_ycdy4")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Panel3" unique_id=2060109190]
+shape = SubResource("BoxShape3D_w48qg")
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Panel3" unique_id=1968653673]
+
+[node name="Label3D" type="Label3D" parent="Panel3" unique_id=1894608345]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.052628875, 0, 0.22387886)
+text = "Pression"
+
+[node name="Panel4" type="Area3D" parent="." unique_id=1995385328]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 1, 0)
+script = SubResource("GDScript_0xm2m")
+system_id = 4
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Panel4" unique_id=1073097096]
+mesh = SubResource("BoxMesh_vivmo")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Panel4" unique_id=1680060602]
+shape = SubResource("BoxShape3D_2cqfq")
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Panel4" unique_id=76795772]
+
+[node name="Label3D" type="Label3D" parent="Panel4" unique_id=1894843662]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.14899182, 0, 0.22387886)
+text = "Sas"
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=529002158]
+script = SubResource("GDScript_h2yge")
+
+[node name="TimerLabel" type="Label" parent="HUD" unique_id=1588532130]
+offset_left = 500.0
+offset_top = 10.0
+offset_right = 700.0
+offset_bottom = 60.0
+
+[node name="PanneLabel" type="Label" parent="HUD" unique_id=784124455]
+offset_left = 300.0
+offset_top = 100.0
+offset_right = 1000.0
+offset_bottom = 123.0
+
+[node name="AlertLabel" type="Label" parent="HUD" unique_id=995436235]
+offset_left = 300.0
+offset_top = 60.0
+offset_right = 900.0
+offset_bottom = 100.0
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+
+[node name="EventLabel" type="Label" parent="HUD" unique_id=71257253]
+offset_left = 200.0
+offset_top = 110.0
+offset_right = 1000.0
+offset_bottom = 150.0
+
+[node name="ApproachLabel" type="Label" parent="HUD" unique_id=181421410]
+offset_left = 400.0
+offset_top = 300.0
+offset_right = 800.0
+offset_bottom = 340.0
+
+[node name="StartPanel" type="Panel" parent="HUD" unique_id=1502499357]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="StartButton" type="Button" parent="HUD/StartPanel" unique_id=681581618]
+layout_mode = 0
+offset_left = 400.0
+offset_top = 270.0
+offset_right = 700.0
+offset_bottom = 350.0
+text = "DEMARRER"
+
+[node name="GameOverPanel" type="Panel" parent="HUD" unique_id=1505024616]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Reason" type="Label" parent="HUD/GameOverPanel" unique_id=70200244]
+layout_mode = 0
+offset_left = 400.0
+offset_top = 250.0
+offset_right = 800.0
+offset_bottom = 330.0
+
+[node name="RestartButton" type="Button" parent="HUD/GameOverPanel" unique_id=1784430998]
+layout_mode = 0
+offset_left = 450.0
+offset_top = 350.0
+offset_right = 650.0
+offset_bottom = 410.0
+text = "RESTART"
+
+[node name="WinPanel" type="Panel" parent="HUD" unique_id=86683468]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="RestartButton" type="Button" parent="HUD/WinPanel" unique_id=543728523]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+text = "RESTART"
+
+[node name="LaunchPanel" type="Panel" parent="HUD" unique_id=583634340]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Action" type="Label" parent="HUD/LaunchPanel" unique_id=324686573]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="Bar" type="ProgressBar" parent="HUD/LaunchPanel" unique_id=1964125049]
+layout_mode = 0
+offset_right = 4.0
+offset_bottom = 27.0
+
+[node name="RepairPanel" type="Panel" parent="HUD" unique_id=571075698]
+offset_left = 50.0
+offset_top = 400.0
+offset_right = 450.0
+offset_bottom = 600.0
+
+[node name="Title" type="Label" parent="HUD/RepairPanel" unique_id=1619673335]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="Status" type="Label" parent="HUD/RepairPanel" unique_id=973498423]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="Widget" type="Control" parent="HUD/RepairPanel" unique_id=1445666727]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Bar" type="ProgressBar" parent="HUD/RepairPanel/Widget" unique_id=1682598529]
+layout_mode = 0
+offset_right = 4.0
+offset_bottom = 27.0
+
+[node name="Info" type="Label" parent="HUD/RepairPanel/Widget" unique_id=214957248]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[connection signal="pressed" from="HUD/StartPanel/StartButton" to="HUD" method="_on_start_pressed"]
+[connection signal="pressed" from="HUD/GameOverPanel/RestartButton" to="HUD" method="_on_restart_pressed"]
+[connection signal="pressed" from="HUD/WinPanel/RestartButton" to="HUD" method="_on_restart_pressed"]
