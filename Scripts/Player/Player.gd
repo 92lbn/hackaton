@@ -42,14 +42,23 @@ func _physics_process(delta: float) -> void:
 	if not _active: return
 	if not is_on_floor(): velocity.y -= GRAVITY * delta
 
-	var dir := Vector3.ZERO
-
+	# Joystick 2 → rotation caméra (comme une souris)
 	if repair_sys:
-		# Joystick Arduino → déplacement
+		var joy2: Vector2 = repair_sys.arduino_joy2
+		var jx2 := (joy2.x - 0.5) * 2.0
+		var jy2 := (joy2.y - 0.5) * 2.0
+		if abs(jx2) < 0.15: jx2 = 0.0
+		if abs(jy2) < 0.15: jy2 = 0.0
+		rotate_y(jx2 * delta * 2.0)
+		#head.rotate_x(-jy2 * delta * 2.0)
+		#head.rotation.x = clampf(head.rotation.x, -1.4, 1.4)
+
+	# Joystick 1 → déplacement
+	var dir := Vector3.ZERO
+	if repair_sys:
 		var joy: Vector2 = repair_sys.arduino_joy
 		var jx := (joy.x - 0.5) * 2.0
 		var jy := (joy.y - 0.5) * 2.0
-		# Zone morte
 		if abs(jx) < 0.15: jx = 0.0
 		if abs(jy) < 0.15: jy = 0.0
 		dir = (transform.basis * Vector3(jx, 0, jy)).normalized()

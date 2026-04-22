@@ -122,6 +122,8 @@ func _parse_message(msg: String) -> void:
 				emit_signal("data_received", "button", parts[1])
 		"pong":       print("[Arduino] Latence : ", Time.get_ticks_msec() - parts[1].to_int(), " ms")
 		"ack":        print("[Arduino] Ack : ", parts[1])
+		"joy2":   emit_signal("data_received", "joy2",    parts[1])
+		"button2": emit_signal("data_received", "button2", parts[1])
 		_:            pass
 
 # ══ API PUBLIQUE ══════════════════════════════════════

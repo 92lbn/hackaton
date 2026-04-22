@@ -133,7 +133,9 @@ func _on_failures(n: int) -> void:
 		1: alert_lbl.text = "1 SYSTEME EN PANNE";  alert_lbl.modulate = CWRN
 		2: alert_lbl.text = "2 SYSTEMES DANGER";   alert_lbl.modulate = Color.ORANGE
 		_: alert_lbl.text = "SURCHARGE IMMINENTE"; alert_lbl.modulate = CCRT
-
+	if get_node_or_null("/root/ArduinoManager"):
+		ArduinoManager._send("alarm:" + ("1" if n > 0 else "0"))
+		
 func _on_event(txt: String) -> void:
 	event_lbl.text     = txt
 	event_lbl.modulate = Color.WHITE

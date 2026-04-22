@@ -18,6 +18,7 @@ var _arduino_pot_rot:    float   = 0.5                 # Potentiomètre rotatif 
 var _arduino_pot_slider: float   = 0.5                 # Slider (0-1)
 var _arduino_piezo:      bool    = false               # Choc piézo
 var _arduino_rfid:       bool    = false               # Badge RFID
+var arduino_joy2:        Vector2 = Vector2(0.5, 0.5)
 
 # ── Variables de jeu ───────────────────────────────────
 var reactor_value  := 0.5;  var reactor_target := 0.7
@@ -202,5 +203,15 @@ func _on_arduino_data(key: String, value: String) -> void:
 			if value == "1":
 				_arduino_rfid = true
 		"button":
+			if value == "1":
+				_arduino_button = true
+		"joy2":
+			var parts := value.split(",")
+			if parts.size() == 2:
+				arduino_joy2 = Vector2(
+					clampf(parts[0].to_float() / 1023.0, 0.0, 1.0),
+					clampf(parts[1].to_float() / 1023.0, 0.0, 1.0)
+				)
+		"button2":
 			if value == "1":
 				_arduino_button = true
