@@ -2,6 +2,13 @@
 
 [ext_resource type="Script" uid="uid://0p1rqw0tvmfr" path="res://Script_cine/Cinematic.gd" id="1_oe414"]
 [ext_resource type="PackedScene" uid="uid://bvsgkrdf5nfid" path="res://Assets/map/extraction_room.glb" id="2_qulof"]
+[ext_resource type="PackedScene" uid="uid://ds7ttce1ggu4x" path="res://Model/centrifugal_pump__bomba_centrifuga.glb" id="3_2rcj5"]
+[ext_resource type="PackedScene" uid="uid://b77uebae14tbg" path="res://Model/Lumières UV.glb" id="4_x6e0r"]
+[ext_resource type="PackedScene" uid="uid://di2ggbtn7iekp" path="res://Model/Sas (Airlock : Door Panel).glb" id="5_in5sc"]
+[ext_resource type="PackedScene" uid="uid://dpj47lhn6jcet" path="res://Model/Pression.glb" id="6_b33wg"]
+[ext_resource type="PackedScene" uid="uid://c6fmtx1lrum8o" path="res://Model/Ventilation.glb" id="7_c824v"]
+[ext_resource type="PackedScene" uid="uid://djwgtl4fkd8fn" path="res://Model/bureau.glb" id="8_in5sc"]
+[ext_resource type="PackedScene" uid="uid://bvf7cwwvjqnd" path="res://Model/ordinateur.glb" id="9_b33wg"]
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_2rcj5"]
 
@@ -23,7 +30,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.754688, 0.092288494)
 script = ExtResource("1_oe414")
 
 [node name="CinematicCamera" type="Camera3D" parent="." unique_id=1798251328]
-transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -9.856028, -0.19568062, 0.7173648)
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -9.921288, -0.39157343, -0.063732624)
 
 [node name="LightMain" type="DirectionalLight3D" parent="." unique_id=1144936357]
 
@@ -286,6 +293,27 @@ grow_vertical = 2
 text = "Z'HOMMES ou Z'HOMELLETTE"
 
 [node name="Sketchfab_Scene" parent="." unique_id=328667832 instance=ExtResource("2_qulof")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 1.4689326, -0.8494865, 10.309666)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.33782572, -1.8487102, 10.111956)
+
+[node name="Sketchfab_Scene2" parent="." unique_id=1168796808 instance=ExtResource("3_2rcj5")]
+transform = Transform3D(0.024745608, 0, 0, 0, 0.041617613, 0, 0, 0, 0.053990416, -9.289358, -2.6771553, 10.240181)
+
+[node name="Sketchfab_Scene3" parent="." unique_id=1215689002 instance=ExtResource("4_x6e0r")]
+transform = Transform3D(0.13705519, 0.60271513, -1.9020911, -0.0651318, 1.9069083, 0.5995484, 1.994235, 0.02085771, 0.15030377, -12.847896, -1.1818241, 12.74506)
+
+[node name="Sketchfab_Scene4" parent="." unique_id=97657742 instance=ExtResource("5_in5sc")]
+transform = Transform3D(0.008629421, 0, 0, 0, 0.006373356, 0, 0, 0, 0.0070733847, -2.7555585, -1.7927434, 4.4512086)
+
+[node name="Sketchfab_Scene5" parent="." unique_id=67413233 instance=ExtResource("6_b33wg")]
+transform = Transform3D(0.0019999917, 5.689888e-06, 0, -5.689888e-06, 0.0019999917, 0, 0, 0, 0.002, -11.127602, -2.122699, 26.349592)
+
+[node name="Sketchfab_Scene6" parent="." unique_id=401222016 instance=ExtResource("7_c824v")]
+transform = Transform3D(1.631115, 0, 0, 0, 0.13590781, 0, 0, 0, 0.69320405, 6.6294146, -1.4761212, 12.309324)
+
+[node name="Sketchfab_Scene7" parent="." unique_id=488527934 instance=ExtResource("8_in5sc")]
+transform = Transform3D(-0.0043496313, -0.0004476521, -0.8642244, 0, 0.7543806, -0.00051284843, 0.8170982, -2.3829714e-06, -0.0046004965, -13.478957, -1.9103959, 0.5485477)
+
+[node name="Sketchfab_Scene8" parent="." unique_id=1263195601 instance=ExtResource("9_b33wg")]
+transform = Transform3D(0.012618203, 0.0017303245, -1.3045841e-05, -0.0013811707, 0.01580622, -0.0002378099, -1.0422468e-05, 0.00024055051, 0.015719986, -14.429374, -1.482486, 0.28283378)
 
 [connection signal="pressed" from="HUD/StartPanel/StartButton" to="." method="_on_start_pressed"]
