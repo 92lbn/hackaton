@@ -136,18 +136,18 @@ func _phase_contamination() -> void:
 func _phase_door() -> void:
 	text_panel.visible = false
 	
-	# Avancer tout droit ET tourner en même temps
+	var start_angle: float = camera.rotation_degrees.y
+	var end_angle: float = start_angle - 45.0
+	
 	var tween := create_tween().set_parallel(true)
 	
-	# Avance vers la porte
+	# Avance sur l'axe X
 	tween.tween_property(camera, "position", 
-		Vector3(camera.position.x +8, camera.position.y, camera.position.z), 
+		Vector3(camera.position.x + 8.0, camera.position.y, camera.position.z), 
 		3.0).set_trans(Tween.TRANS_SINE)
 	
-	# Tourne 90° vers la droite en même temps
-	tween.tween_property(camera, "rotation_degrees", 
-		Vector3(camera.rotation_degrees.x, -90.0, camera.rotation_degrees.z), 
-		3.0).set_trans(Tween.TRANS_SINE)
+	# Tourne 90° depuis l'angle actuel
+	tween.tween_method(_rotate_camera, start_angle, end_angle, 5.0)
 	
 	await tween.finished
 	
@@ -157,6 +157,9 @@ func _phase_door() -> void:
 	await fade.finished
 	
 	_phase_start()
+
+func _rotate_camera(angle: float) -> void:
+	camera.rotation_degrees.y = angle
 
 # ============================================================
 # PHASE 5 — Bouton DEMARRER
