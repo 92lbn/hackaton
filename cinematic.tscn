@@ -1,34 +1,29 @@
 [gd_scene format=3 uid="uid://bipv7xhdq3w0k"]
 
 [ext_resource type="Script" uid="uid://0p1rqw0tvmfr" path="res://Script_cine/Cinematic.gd" id="1_oe414"]
-[ext_resource type="PackedScene" uid="uid://dcb73hcabovqx" path="res://Assets/SpaceStationKit/Models/GLB format/floor.glb" id="2_qulof"]
-[ext_resource type="PackedScene" uid="uid://ciadsxibpamiu" path="res://Assets/SpaceStationKit/Models/GLB format/wall-window.glb" id="3_kqd23"]
-[ext_resource type="PackedScene" uid="uid://36y031cs4xm1" path="res://Assets/SpaceStationKit/Models/GLB format/wall.glb" id="4_2rcj5"]
-[ext_resource type="PackedScene" uid="uid://blurex6tvgt5g" path="res://Assets/SpaceStationKit/Models/GLB format/wall-door.glb" id="5_x6e0r"]
-[ext_resource type="PackedScene" uid="uid://dkjkfk7axsalf" path="res://Assets/SpaceStationKit/Models/GLB format/table-large.glb" id="6_in5sc"]
-[ext_resource type="PackedScene" uid="uid://cw7co5lcq77p3" path="res://Assets/SpaceStationKit/Models/GLB format/container-flat.glb" id="7_2rcj5"]
+[ext_resource type="PackedScene" uid="uid://bvsgkrdf5nfid" path="res://Assets/map/extraction_room.glb" id="2_qulof"]
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_2rcj5"]
 
 [sub_resource type="PointMesh" id="PointMesh_2rcj5"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2rcj5"]
-albedo_color = Color(0.32156864, 0.7176471, 0.53333336, 1)
+albedo_color = Color(0.08258306, 0.28728923, 0.05746498, 1)
 emission_enabled = true
-emission = Color(0.32156864, 0.7176471, 0.53333336, 1)
+emission = Color(0.04153478, 0.22975385, 0.04871598, 1)
 emission_energy_multiplier = 2.0
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_x6e0r"]
 material = SubResource("StandardMaterial3D_2rcj5")
-radius = 0.12
-height = 0.4
+radius = 0.225
+height = 0.665
 
 [node name="Cinematic" type="Node3D" unique_id=1833732185]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.754688, 0.092288494)
 script = ExtResource("1_oe414")
 
 [node name="CinematicCamera" type="Camera3D" parent="." unique_id=1798251328]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.19568062, 1.3299966)
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -9.856028, -0.19568062, 0.7173648)
 
 [node name="LightMain" type="DirectionalLight3D" parent="." unique_id=1144936357]
 
@@ -43,71 +38,220 @@ draw_pass_1 = SubResource("PointMesh_2rcj5")
 [node name="Mushrooms" type="Node3D" parent="." unique_id=736520488]
 
 [node name="Mushroom0" type="MeshInstance3D" parent="Mushrooms" unique_id=1702521653]
-transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -3.1355562, -0.47442722, -1.2435656)
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -1.8083675, -0.41386464, -2.252652)
 mesh = SubResource("CapsuleMesh_x6e0r")
 
-[node name="Mushroom1" type="MeshInstance3D" parent="Mushrooms" unique_id=322295254]
-transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, 2.9644814, -0.5045223, -1.2435656)
+[node name="Mushroom1" type="MeshInstance3D" parent="Mushrooms" unique_id=395522305]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -1.8083675, -0.41386464, 3.9549441)
 mesh = SubResource("CapsuleMesh_x6e0r")
 
-[node name="Mushroom2" type="MeshInstance3D" parent="Mushrooms" unique_id=999357553]
-transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -2.972453, -0.27726197, -1.2435656)
+[node name="Mushroom2" type="MeshInstance3D" parent="Mushrooms" unique_id=1072329909]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -1.8083675, -0.06324339, -2.0469599)
 mesh = SubResource("CapsuleMesh_x6e0r")
 
-[node name="Mushroom3" type="MeshInstance3D" parent="Mushrooms" unique_id=634011987]
-transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, 2.752449, -0.26942158, -1.2435656)
+[node name="Mushroom3" type="MeshInstance3D" parent="Mushrooms" unique_id=1851455178]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -1.8083675, 0.251729, -2.252652)
 mesh = SubResource("CapsuleMesh_x6e0r")
 
-[node name="Mushroom4" type="MeshInstance3D" parent="Mushrooms" unique_id=1227178863]
-transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -3.1355562, 0, -1.2435656)
+[node name="Mushroom4" type="MeshInstance3D" parent="Mushrooms" unique_id=1314289376]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -1.8083675, 1.1123995, -1.4012632)
 mesh = SubResource("CapsuleMesh_x6e0r")
 
-[node name="Mushroom5" type="MeshInstance3D" parent="Mushrooms" unique_id=272295567]
-transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, 2.856742, 0, -1.2435656)
+[node name="Mushroom5" type="MeshInstance3D" parent="Mushrooms" unique_id=980661671]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -1.8083675, 0.52723646, -2.0167131)
 mesh = SubResource("CapsuleMesh_x6e0r")
 
-[node name="Mushroom6" type="MeshInstance3D" parent="Mushrooms" unique_id=1854879969]
-transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -2.7231553, -0.52517605, -1.2435656)
+[node name="Mushroom6" type="MeshInstance3D" parent="Mushrooms" unique_id=884064778]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -1.8083675, 0.8646389, 3.5907738)
 mesh = SubResource("CapsuleMesh_x6e0r")
 
-[node name="Mushroom7" type="MeshInstance3D" parent="Mushrooms" unique_id=198186832]
-transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, 2.475481, 0, -1.2435656)
+[node name="Mushroom7" type="MeshInstance3D" parent="Mushrooms" unique_id=795982448]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -1.8083675, 0.62685657, 3.8064687)
 mesh = SubResource("CapsuleMesh_x6e0r")
 
-[node name="Mushroom8" type="MeshInstance3D" parent="Mushrooms" unique_id=1327357276]
-transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -1.895905, 0, -1.2435656)
+[node name="Mushroom8" type="MeshInstance3D" parent="Mushrooms" unique_id=2082188796]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -1.8083675, -1.5719228, 1.2787986)
 mesh = SubResource("CapsuleMesh_x6e0r")
 
-[node name="Mushroom9" type="MeshInstance3D" parent="Mushrooms" unique_id=1705073863]
-transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, 0.2777779, 0, -1.2435656)
+[node name="Mushroom9" type="MeshInstance3D" parent="Mushrooms" unique_id=1039642565]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -1.8083675, -1.2641835, 3.7073605)
 mesh = SubResource("CapsuleMesh_x6e0r")
 
-[node name="Mushroom10" type="MeshInstance3D" parent="Mushrooms" unique_id=1376395738]
-transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -1.0811815, -0.3964424, -1.2435656)
+[node name="Mushroom10" type="MeshInstance3D" parent="Mushrooms" unique_id=1981711841]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -1.8083675, -1.4198844, 3.2528155)
 mesh = SubResource("CapsuleMesh_x6e0r")
 
-[node name="Mushroom11" type="MeshInstance3D" parent="Mushrooms" unique_id=765708197]
-transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -0.41728342, -0.41329622, 0.24219656)
+[node name="Mushroom11" type="MeshInstance3D" parent="Mushrooms" unique_id=987198717]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -1.8083675, -0.2147876, 4.168631)
 mesh = SubResource("CapsuleMesh_x6e0r")
 
-[node name="Mushroom12" type="MeshInstance3D" parent="Mushrooms" unique_id=71743464]
-transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -0.26168275, -0.41329622, 0.43801594)
+[node name="Mushroom12" type="MeshInstance3D" parent="Mushrooms" unique_id=189905637]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -4.2326856, -1.5127656, -1.9035795)
 mesh = SubResource("CapsuleMesh_x6e0r")
 
-[node name="Mushroom13" type="MeshInstance3D" parent="Mushrooms" unique_id=1184280678]
-transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, 0.25508487, -0.35250235, 0.06304312)
+[node name="Mushroom13" type="MeshInstance3D" parent="Mushrooms" unique_id=1784049804]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -1.8083675, 1.1179702, 3.2532403)
 mesh = SubResource("CapsuleMesh_x6e0r")
 
-[node name="Mushroom14" type="MeshInstance3D" parent="Mushrooms" unique_id=192730251]
-transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, 0.12486267, -0.41329622, 0.24219656)
+[node name="Mushroom14" type="MeshInstance3D" parent="Mushrooms" unique_id=1024649038]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -1.8083675, 1.3466792, 2.0807164)
 mesh = SubResource("CapsuleMesh_x6e0r")
 
-[node name="floor2" parent="." unique_id=1960227130 instance=ExtResource("2_qulof")]
-transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 0, -0.9740886, -3)
+[node name="Mushroom15" type="MeshInstance3D" parent="Mushrooms" unique_id=1575559350]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -1.8083675, 1.057833, 1.9286642)
+mesh = SubResource("CapsuleMesh_x6e0r")
 
-[node name="floor3" parent="." unique_id=1681381147 instance=ExtResource("2_qulof")]
-transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 0, 0.30000955, -3)
-visible = false
+[node name="Mushroom16" type="MeshInstance3D" parent="Mushrooms" unique_id=1812244702]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -1.8083675, -1.492095, 0.7111857)
+mesh = SubResource("CapsuleMesh_x6e0r")
+
+[node name="Mushroom17" type="MeshInstance3D" parent="Mushrooms" unique_id=65533042]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -1.8083675, -1.5455625, 0.5287901)
+mesh = SubResource("CapsuleMesh_x6e0r")
+
+[node name="Mushroom18" type="MeshInstance3D" parent="Mushrooms" unique_id=1528123267]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -1.8083675, -1.3403225, -2.0153348)
+mesh = SubResource("CapsuleMesh_x6e0r")
+
+[node name="Mushroom19" type="MeshInstance3D" parent="Mushrooms" unique_id=233781708]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -1.8083675, -1.492095, -1.8451941)
+mesh = SubResource("CapsuleMesh_x6e0r")
+
+[node name="Mushroom20" type="MeshInstance3D" parent="Mushrooms" unique_id=887723073]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -1.8083675, 1.1151991, 0.7111857)
+mesh = SubResource("CapsuleMesh_x6e0r")
+
+[node name="Mushroom21" type="MeshInstance3D" parent="Mushrooms" unique_id=2146607382]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -4.0826626, -1.350641, -1.9035795)
+mesh = SubResource("CapsuleMesh_x6e0r")
+
+[node name="Mushroom22" type="MeshInstance3D" parent="Mushrooms" unique_id=1570401643]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -4.2326856, -1.5127656, -1.6273133)
+mesh = SubResource("CapsuleMesh_x6e0r")
+
+[node name="Mushroom23" type="MeshInstance3D" parent="Mushrooms" unique_id=411510748]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -4.512951, -1.5127656, -1.9035795)
+mesh = SubResource("CapsuleMesh_x6e0r")
+
+[node name="Mushroom24" type="MeshInstance3D" parent="Mushrooms" unique_id=797861827]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -4.2326856, -1.5127656, 3.0686448)
+mesh = SubResource("CapsuleMesh_x6e0r")
+
+[node name="Mushroom25" type="MeshInstance3D" parent="Mushrooms" unique_id=846377499]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -4.2326856, -1.5127656, 3.0686448)
+mesh = SubResource("CapsuleMesh_x6e0r")
+
+[node name="Mushroom26" type="MeshInstance3D" parent="Mushrooms" unique_id=193402440]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -4.709865, -1.2806048, 3.0686448)
+mesh = SubResource("CapsuleMesh_x6e0r")
+
+[node name="Mushroom27" type="MeshInstance3D" parent="Mushrooms" unique_id=1665017468]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -6.6329994, -0.41386464, -2.252652)
+mesh = SubResource("CapsuleMesh_x6e0r")
+
+[node name="Mushroom28" type="MeshInstance3D" parent="Mushrooms" unique_id=956359777]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -6.6329994, -0.41386464, 3.9549441)
+mesh = SubResource("CapsuleMesh_x6e0r")
+
+[node name="Mushroom29" type="MeshInstance3D" parent="Mushrooms" unique_id=1553833826]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -6.6329994, -0.06324339, -2.0469599)
+mesh = SubResource("CapsuleMesh_x6e0r")
+
+[node name="Mushroom30" type="MeshInstance3D" parent="Mushrooms" unique_id=682026618]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -6.6329994, 0.251729, -2.252652)
+mesh = SubResource("CapsuleMesh_x6e0r")
+
+[node name="Mushroom31" type="MeshInstance3D" parent="Mushrooms" unique_id=214030119]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -6.632999, 1.600456, -1.4012632)
+mesh = SubResource("CapsuleMesh_x6e0r")
+
+[node name="Mushroom32" type="MeshInstance3D" parent="Mushrooms" unique_id=639257116]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -6.6329994, 0.52723646, -2.0167131)
+mesh = SubResource("CapsuleMesh_x6e0r")
+
+[node name="Mushroom33" type="MeshInstance3D" parent="Mushrooms" unique_id=821664994]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -6.6329994, 0.8646389, 3.5907738)
+mesh = SubResource("CapsuleMesh_x6e0r")
+
+[node name="Mushroom34" type="MeshInstance3D" parent="Mushrooms" unique_id=880091135]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -6.6329994, 0.62685657, 3.8064687)
+mesh = SubResource("CapsuleMesh_x6e0r")
+
+[node name="Mushroom35" type="MeshInstance3D" parent="Mushrooms" unique_id=66707783]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -6.6329994, -1.5719228, 1.2787986)
+mesh = SubResource("CapsuleMesh_x6e0r")
+
+[node name="Mushroom36" type="MeshInstance3D" parent="Mushrooms" unique_id=1632519422]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -6.6329994, -1.2641835, 3.7073605)
+mesh = SubResource("CapsuleMesh_x6e0r")
+
+[node name="Mushroom37" type="MeshInstance3D" parent="Mushrooms" unique_id=1025714302]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -6.6329994, -1.4198844, 3.2528155)
+mesh = SubResource("CapsuleMesh_x6e0r")
+
+[node name="Mushroom38" type="MeshInstance3D" parent="Mushrooms" unique_id=2012461652]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -6.6329994, -0.2147876, 4.168631)
+mesh = SubResource("CapsuleMesh_x6e0r")
+
+[node name="Mushroom39" type="MeshInstance3D" parent="Mushrooms" unique_id=1718321029]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -9.057318, -1.5127656, -1.9035795)
+mesh = SubResource("CapsuleMesh_x6e0r")
+
+[node name="Mushroom40" type="MeshInstance3D" parent="Mushrooms" unique_id=1434295701]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -6.632999, 1.1179702, 4.421066)
+mesh = SubResource("CapsuleMesh_x6e0r")
+
+[node name="Mushroom41" type="MeshInstance3D" parent="Mushrooms" unique_id=835030233]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -6.632999, 1.6438863, 2.0807164)
+mesh = SubResource("CapsuleMesh_x6e0r")
+
+[node name="Mushroom42" type="MeshInstance3D" parent="Mushrooms" unique_id=632540916]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -6.632999, 1.4756911, 1.9286642)
+mesh = SubResource("CapsuleMesh_x6e0r")
+
+[node name="Mushroom43" type="MeshInstance3D" parent="Mushrooms" unique_id=1002491362]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -6.6329994, -1.492095, 0.7111857)
+mesh = SubResource("CapsuleMesh_x6e0r")
+
+[node name="Mushroom44" type="MeshInstance3D" parent="Mushrooms" unique_id=2069112758]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -6.6329994, -1.5455625, 0.5287901)
+mesh = SubResource("CapsuleMesh_x6e0r")
+
+[node name="Mushroom45" type="MeshInstance3D" parent="Mushrooms" unique_id=411171812]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -6.6329994, -1.3403225, -2.0153348)
+mesh = SubResource("CapsuleMesh_x6e0r")
+
+[node name="Mushroom46" type="MeshInstance3D" parent="Mushrooms" unique_id=1396204113]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -6.6329994, -1.492095, -1.8451941)
+mesh = SubResource("CapsuleMesh_x6e0r")
+
+[node name="Mushroom47" type="MeshInstance3D" parent="Mushrooms" unique_id=563099086]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -6.632999, 1.5440509, 0.7111857)
+mesh = SubResource("CapsuleMesh_x6e0r")
+
+[node name="Mushroom48" type="MeshInstance3D" parent="Mushrooms" unique_id=179436179]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -8.907294, -1.350641, -1.9035795)
+mesh = SubResource("CapsuleMesh_x6e0r")
+
+[node name="Mushroom49" type="MeshInstance3D" parent="Mushrooms" unique_id=622790529]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -9.057318, -1.5127656, -1.6273133)
+mesh = SubResource("CapsuleMesh_x6e0r")
+
+[node name="Mushroom50" type="MeshInstance3D" parent="Mushrooms" unique_id=322476380]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -9.337583, -1.5127656, -1.9035795)
+mesh = SubResource("CapsuleMesh_x6e0r")
+
+[node name="Mushroom51" type="MeshInstance3D" parent="Mushrooms" unique_id=751855173]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -9.057318, -1.5127656, 3.0686448)
+mesh = SubResource("CapsuleMesh_x6e0r")
+
+[node name="Mushroom52" type="MeshInstance3D" parent="Mushrooms" unique_id=1732144231]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -9.057318, -1.5127656, 3.0686448)
+mesh = SubResource("CapsuleMesh_x6e0r")
+
+[node name="Mushroom53" type="MeshInstance3D" parent="Mushrooms" unique_id=829090837]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, -9.534496, -1.2806048, 3.0686448)
+mesh = SubResource("CapsuleMesh_x6e0r")
 
 [node name="HUD" type="CanvasLayer" parent="." unique_id=1888906072]
 
@@ -141,40 +285,7 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "Z'HOMMES ou Z'HOMELLETTE"
 
-[node name="wall-window3" parent="." unique_id=507275491 instance=ExtResource("3_kqd23")]
-transform = Transform3D(2, 0, 0, 0, 1, 0, 0, 0, 1, -2.4103842, -0.68, -1.5474935)
-
-[node name="wall3" parent="wall-window3" unique_id=1387423197 instance=ExtResource("4_2rcj5")]
-transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 1, 1.642724, 0, 0.006000042)
-
-[node name="wall2" parent="wall-window3" unique_id=109644448 instance=ExtResource("4_2rcj5")]
-transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 1, 0.7496921, 0, 0.006000042)
-
-[node name="wall-door2" parent="wall-window3" unique_id=2001245277 instance=ExtResource("5_x6e0r")]
-transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 1, 1.1981237, -0.0087047815, 0.00573349)
-
-[node name="wall-window2" parent="wall-window3" unique_id=1037379498 instance=ExtResource("3_kqd23")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.3478043, -0.004999995, 0.007032156)
-
-[node name="wall4" parent="." unique_id=1982752883 instance=ExtResource("4_2rcj5")]
-transform = Transform3D(-4.371139e-07, 0, 1, 0, 1, 0, -10, 0, -4.371139e-08, -3.3963203, -0.6960153, -3.0435698)
-
-[node name="wall5" parent="." unique_id=517753560 instance=ExtResource("4_2rcj5")]
-transform = Transform3D(-4.371139e-07, 0, 1, 0, 1, 0, -10, 0, -4.371139e-08, 3.289, -0.68, -3.0186043)
-
-[node name="table-large2" parent="." unique_id=460892954 instance=ExtResource("6_in5sc")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.031113774, -0.747185, 0.26574576)
-
-[node name="wall6" parent="." unique_id=1802505073 instance=ExtResource("4_2rcj5")]
-transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 1, 0.27, -0.68, -7.8023734)
-
-[node name="container-flat3" parent="." unique_id=1113845125 instance=ExtResource("7_2rcj5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.403764, -0.77389455, -2.630443)
-
-[node name="container-flat2" parent="." unique_id=446019873 instance=ExtResource("7_2rcj5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5826929, -0.77884233, -2.7580147)
-
-[node name="wall2" parent="." unique_id=660806677 instance=ExtResource("4_2rcj5")]
-transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 1, -0.001, -0.68, 1.845)
+[node name="Sketchfab_Scene" parent="." unique_id=328667832 instance=ExtResource("2_qulof")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 1.4689326, -0.8494865, 10.309666)
 
 [connection signal="pressed" from="HUD/StartPanel/StartButton" to="." method="_on_start_pressed"]

@@ -136,9 +136,18 @@ func _phase_contamination() -> void:
 func _phase_door() -> void:
 	text_panel.visible = false
 	
-	# La caméra avance automatiquement vers la porte
-	var tween := create_tween()
-	tween.tween_property(camera, "position", Vector3(0, camera.position.y, -4.0), 3.0).set_trans(Tween.TRANS_SINE)
+	# Avancer tout droit ET tourner en même temps
+	var tween := create_tween().set_parallel(true)
+	
+	# Avance vers la porte
+	tween.tween_property(camera, "position", 
+		Vector3(camera.position.x +8, camera.position.y, camera.position.z), 
+		3.0).set_trans(Tween.TRANS_SINE)
+	
+	# Tourne 90° vers la droite en même temps
+	tween.tween_property(camera, "rotation_degrees", 
+		Vector3(camera.rotation_degrees.x, -90.0, camera.rotation_degrees.z), 
+		3.0).set_trans(Tween.TRANS_SINE)
 	
 	await tween.finished
 	
