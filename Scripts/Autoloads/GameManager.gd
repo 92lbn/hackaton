@@ -64,10 +64,10 @@ func _ready() -> void:
 
 func start_game() -> void:
 	_running       = true
-	game_timer     = 90.0
+	game_timer     = 300.0
 	_elapsed       = 0.0
-	_fail_timer    = 4.0
-	_fail_interval = 7.0
+	_fail_timer    = 10.0
+	_fail_interval = 15.0
 	_next_event    = 0
 	_launch_active = false
 	_launch_step   = 0
