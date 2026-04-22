@@ -73,7 +73,11 @@ func _scan_ports(port_list: Array) -> void:
 				emit_signal("arduino_connected")
 				return
 		serial.close()
+	
+	# Pas d'Arduino trouvé — continuer sans
+	print("[Pairing] Pas d'Arduino — mode sans manette")
 	emit_signal("pairing_failed")
+	# NE PAS relancer le scan automatiquement !
 
 func _read_all_available() -> String:
 	var result := ""
@@ -92,9 +96,6 @@ func _process(_delta: float) -> void:
 				emit_signal("arduino_disconnected")
 				_paired = false
 
-	if not _paired:
-		start_pairing()
-		return
 
 	while serial.bytes_available() > 0:
 		_buffer += serial.read_string(serial.bytes_available())

@@ -8,6 +8,10 @@
 [ext_resource type="PackedScene" uid="uid://dkjkfk7axsalf" path="res://Assets/SpaceStationKit/Models/GLB format/table-large.glb" id="6_in5sc"]
 [ext_resource type="PackedScene" uid="uid://cw7co5lcq77p3" path="res://Assets/SpaceStationKit/Models/GLB format/container-flat.glb" id="7_2rcj5"]
 
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_2rcj5"]
+
+[sub_resource type="PointMesh" id="PointMesh_2rcj5"]
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2rcj5"]
 albedo_color = Color(0.32156864, 0.7176471, 0.53333336, 1)
 emission_enabled = true
@@ -33,6 +37,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.19568062, 1.3299966)
 [node name="LightViolet" type="OmniLight3D" parent="." unique_id=1458936441]
 
 [node name="SporeParticles" type="GPUParticles3D" parent="." unique_id=1952476782]
+process_material = SubResource("ParticleProcessMaterial_2rcj5")
+draw_pass_1 = SubResource("PointMesh_2rcj5")
 
 [node name="Mushrooms" type="Node3D" parent="." unique_id=736520488]
 
@@ -167,5 +173,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.403764, -0.77389455, -2.630
 
 [node name="container-flat2" parent="." unique_id=446019873 instance=ExtResource("7_2rcj5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5826929, -0.77884233, -2.7580147)
+
+[node name="wall2" parent="." unique_id=660806677 instance=ExtResource("4_2rcj5")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 1, -0.001, -0.68, 1.845)
 
 [connection signal="pressed" from="HUD/StartPanel/StartButton" to="." method="_on_start_pressed"]
