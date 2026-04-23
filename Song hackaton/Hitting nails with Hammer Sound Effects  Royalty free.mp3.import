@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bbfdab53qnjmv"
+path="res://.godot/imported/Hitting nails with Hammer Sound Effects  Royalty free.mp3-52c02be67ea2e4fc27117dbe5046d5fc.mp3str"
+
+[deps]
+
+source_file="res://Song hackaton/Hitting nails with Hammer Sound Effects  Royalty free.mp3"
+dest_files=["res://.godot/imported/Hitting nails with Hammer Sound Effects  Royalty free.mp3-52c02be67ea2e4fc27117dbe5046d5fc.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://c6gb4m3enaxva"
+path="res://.godot/imported/BRUIT BATTEMENT DE COEUR.mp3-36cb9fd74a27ee8d99854ca1f93766e5.mp3str"
+
+[deps]
+
+source_file="res://Song hackaton/BRUIT BATTEMENT DE COEUR.mp3"
+dest_files=["res://.godot/imported/BRUIT BATTEMENT DE COEUR.mp3-36cb9fd74a27ee8d99854ca1f93766e5.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
