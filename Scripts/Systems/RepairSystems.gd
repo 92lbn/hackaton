@@ -13,11 +13,11 @@ signal repair_flashed(system_id: int)
 
 
 # ── Variables Arduino ──────────────────────────────────
-var arduino_joy:         Vector2 = Vector2(0.5, 0.5)  # Joystick X,Y (0-1)
-var _arduino_pot_rot:    float   = 0.5                 # Potentiomètre rotatif (0-1)
-var _arduino_pot_slider: float   = 0.5                 # Slider (0-1)
-var _arduino_piezo:      bool    = false               # Choc piézo
-var _arduino_rfid:       bool    = false               # Badge RFID
+var arduino_joy:         Vector2 = Vector2(0.5, 0.5)
+var _arduino_pot_rot:    float   = 0.5
+var _arduino_pot_slider: float   = 0.5
+var _arduino_piezo:      bool    = false
+var _arduino_rfid:       bool    = false
 var arduino_joy2:        Vector2 = Vector2(0.5, 0.5)
 
 # ── Variables de jeu ───────────────────────────────────
@@ -29,6 +29,7 @@ var signal_lock    := 0.0
 var electric_hits  := 0;    var electric_cool  := 0.0
 var door_hold      := 0.0
 var _arduino_button: bool = false
+var _difficulty: int = 1
 
 var signal_hits: int = 0
 var signal_cool: float = 0.0
@@ -41,7 +42,6 @@ func _ready() -> void:
 	GameManager.connect("system_state_changed", _on_fail)
 	GameManager.connect("launch_step_required", _on_launch_step)
 	GameManager.connect("launch_success", func(): _launch_waiting = false)
-	# Attendre que tout soit prêt avant de connecter Arduino
 	call_deferred("_connect_arduino")
 
 func _connect_arduino() -> void:
@@ -53,8 +53,10 @@ func _connect_arduino() -> void:
 
 func _process(delta: float) -> void:
 	if not GameManager.is_running() and not GameManager.is_launch_active(): return
-	
-	# DEBUG — affiche les valeurs Arduino toutes les secondes
+	if GameManager.get_elapsed() >= 60.0:
+		_difficulty = 2
+	else:
+		_difficulty = 1
 	if Engine.get_process_frames() % 60 == 0:
 		print("=== ARDUINO DEBUG ===")
 		print("  joystick     : ", arduino_joy)
@@ -62,13 +64,12 @@ func _process(delta: float) -> void:
 		print("  slider       : ", _arduino_pot_slider)
 		print("  piezo        : ", _arduino_piezo)
 		print("  rfid         : ", _arduino_rfid)
-		print("  button       : ", _arduino_button)  # ← ajoute cette ligne
+		print("  button       : ", _arduino_button)
 		print("  reactor_val  : ", reactor_value, " / cible : ", reactor_target)
 		print("  oxygen_pos   : ", oxygen_pos)
 		print("  signal_angle : ", signal_angle, " / cible : ", signal_target)
 		print("  electric_hits: ", electric_hits)
 		print("  door_hold    : ", door_hold)
-	
 	_reactor(delta)
 	_oxygen(delta)
 	_signal_sys(delta)
@@ -79,35 +80,37 @@ func _active(id: int) -> bool:
 	return GameManager.is_system_failing(id) or (_launch_waiting and _launch_system == id)
 
 # ══ RÉACTEUR — Potentiomètre rotatif ══════════════════
-# Tourner jusqu'à la valeur cible ± 6%
 func _reactor(delta: float) -> void:
 	if not _active(0): return
 	reactor_value = _arduino_pot_rot
 	emit_signal("reactor_updated", reactor_value, reactor_target)
 	if abs(reactor_value - reactor_target) < 0.06:
-		_repair(0)
+		if _difficulty == 1:
+			_repair(0)
+		elif _difficulty == 2 and _arduino_button:
+			_repair(0)
 
 # ══ OXYGÈNE — Slider ══════════════════════════════════
-# Maintenir le slider dans la zone centrale 2 secondes
 func _oxygen(delta: float) -> void:
 	if not _active(1): return
-	# Dérive automatique
 	oxygen_pos += oxygen_drift * 0.8 * delta
 	if abs(oxygen_pos) >= 1.0: oxygen_drift *= -1.0
-	# Slider Arduino : 0-1 → -1 à 1
 	var slider_pos := (_arduino_pot_slider - 0.5) * 2.0
 	oxygen_pos = clampf(oxygen_pos + slider_pos * 1.5 * delta, -1.0, 1.0)
 	emit_signal("oxygen_updated", oxygen_pos)
 	if abs(oxygen_pos) < 0.15:
 		oxygen_hold += delta
 		if oxygen_hold >= 2.0:
-			oxygen_hold = 0.0
-			_repair(1)
+			if _difficulty == 1:
+				oxygen_hold = 0.0
+				_repair(1)
+			elif _difficulty == 2 and abs(_arduino_pot_rot - reactor_target) < 0.15:
+				oxygen_hold = 0.0
+				_repair(1)
 	else:
 		oxygen_hold = maxf(oxygen_hold - delta * 0.5, 0.0)
 
 # ══ SIGNAL — Joystick (bouton) ════════════════════════
-# Orienter vers la cible avec le joystick
 func _signal_sys(delta: float) -> void:
 	if not _active(2): return
 	signal_cool = maxf(signal_cool - delta, 0.0)
@@ -123,7 +126,6 @@ func _signal_sys(delta: float) -> void:
 		emit_signal("signal_updated", Vector2(signal_hits, 0), Vector2(3, 0))
 
 # ══ ÉLECTRIQUE — Piézo ════════════════════════════════
-# Taper 3 fois fort sur le piézo
 func _electric(delta: float) -> void:
 	if not _active(3): return
 	electric_cool = maxf(electric_cool - delta, 0.0)
@@ -139,7 +141,6 @@ func _electric(delta: float) -> void:
 		emit_signal("electric_updated", electric_hits, 3)
 
 # ══ PORTES — RFID ═════════════════════════════════════
-# Scanner le badge RFID
 func _door(delta: float) -> void:
 	if not _active(4):
 		door_hold = 0.0
@@ -157,7 +158,6 @@ func _door(delta: float) -> void:
 # ══ RÉPARATION ════════════════════════════════════════
 func _repair(id: int) -> void:
 	emit_signal("repair_flashed", id)
-	# Vibration feedback
 	if get_node_or_null("/root/ArduinoManager"):
 		ArduinoManager.send_vibe(150)
 	if _launch_waiting and _launch_system == id:
