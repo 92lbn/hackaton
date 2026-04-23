@@ -30,9 +30,9 @@ const CASCADES := {
 }
 
 const EVENTS := [
-	[20.0, "ALERTE : spores detectees dans le couloir B3"],
-	[40.0, "SIGNAL CAPTE : quelqu'un... au secours..."],
-	[60.0, "SURTENSION — contamination en cours !"],
+	[20.0, "ALERTE : spores detectees dans le couloir B3"], # fumée verte dans la salle qui apparait puis disparait 
+	[40.0, "SIGNAL CAPTE : quelqu'un... au secours..."], # son de quelqun qui dit ça 
+	[60.0, "SURTENSION — contamination en cours !"], # full champignons qui apparaisse 
 ]
 
 const LAUNCH_SEQUENCE := [

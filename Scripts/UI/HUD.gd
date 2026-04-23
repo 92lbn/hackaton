@@ -29,6 +29,10 @@ const CCRT := Color(0.95, 0.15, 0.1)
 var _cur_system := -1
 var _evt_timer  := 0.0
 
+# ── Liste des pannes (créée par code) ─────────────────
+var _fail_panel: Panel
+var _fail_labels: Array[Label] = []
+
 # ══════════════════════════════════════════════════════
 func _ready() -> void:
 	# Arduino
@@ -63,6 +67,56 @@ func _ready() -> void:
 	approach_lbl.text  = ""
 	alert_lbl.text     = ""
 	panne_lbl.text     = ""
+
+	# Créer le panneau de liste des pannes par code
+	_create_fail_panel()
+
+# ══ PANNEAU LISTE PANNES (créé par code) ══════════════
+func _create_fail_panel() -> void:
+	_fail_panel = Panel.new()
+	_fail_panel.position = Vector2(20, 100)
+	_fail_panel.size     = Vector2(220, 160)
+	_fail_panel.visible  = false
+	add_child(_fail_panel)
+
+	var vbox := VBoxContainer.new()
+	vbox.position = Vector2(10, 8)
+	vbox.size     = Vector2(200, 150)
+	_fail_panel.add_child(vbox)
+
+	# Titre
+	var title := Label.new()
+	title.text = "PANNES EN COURS"
+	title.modulate = Color.WHITE
+	title.add_theme_font_size_override("font_size", 13)
+	vbox.add_child(title)
+
+	# Une ligne par système
+	var names := ["VENTILATION", "TEMPERATURE", "LUMIERES UV", "PRESSION", "SAS"]
+	for i in range(5):
+		var lbl := Label.new()
+		lbl.text = names[i]
+		lbl.add_theme_font_size_override("font_size", 12)
+		lbl.visible = false
+		vbox.add_child(lbl)
+		_fail_labels.append(lbl)
+
+func _update_fail_panel() -> void:
+	var any_fail := false
+	for i in range(5):
+		var state := GameManager.get_state(i)
+		if state == GameManager.State.OK:
+			_fail_labels[i].visible = false
+		else:
+			_fail_labels[i].visible = true
+			any_fail = true
+			if state == GameManager.State.WARNING:
+				_fail_labels[i].text     = "⚠ " + GameManager.SYSTEM_NAMES[i]
+				_fail_labels[i].modulate = CWRN
+			else:
+				_fail_labels[i].text     = "🔴 " + GameManager.SYSTEM_NAMES[i]
+				_fail_labels[i].modulate = CCRT
+	_fail_panel.visible = any_fail
 
 # ══════════════════════════════════════════════════════
 func _process(delta: float) -> void:
@@ -99,10 +153,8 @@ func hide_panel() -> void:
 	approach_lbl.text  = ""
 
 func _refresh_panel() -> void:
-	
 	if _cur_system == -1: return
 	var failing: bool = GameManager.is_system_failing(_cur_system)
-	print("REFRESH panel=", _cur_system, " failing=", failing, " state=", GameManager.get_state(_cur_system))
 	repair_pnl.visible = failing
 	if not failing:
 		approach_lbl.text = "NOMINAL"
@@ -111,7 +163,6 @@ func _refresh_panel() -> void:
 		var s: int = GameManager.get_state(_cur_system)
 		repair_status.text     = "PANNE" if s == 1 else "CRITIQUE"
 		repair_status.modulate = CWRN   if s == 1 else CCRT
-		# Forcer l'affichage du bon widget selon le système
 		match _cur_system:
 			0: repair_widget.get_node_or_null("Info").text = "TOURNER LE POTENTIOMETRE" if repair_widget.get_node_or_null("Info") else ""
 			1: repair_widget.get_node_or_null("Info").text = "GLISSER LE SLIDER" if repair_widget.get_node_or_null("Info") else ""
@@ -135,7 +186,7 @@ func _on_failures(n: int) -> void:
 		_: alert_lbl.text = "SURCHARGE IMMINENTE"; alert_lbl.modulate = CCRT
 	if get_node_or_null("/root/ArduinoManager"):
 		ArduinoManager._send("alarm:" + ("1" if n > 0 else "0"))
-		
+
 func _on_event(txt: String) -> void:
 	event_lbl.text     = txt
 	event_lbl.modulate = Color.WHITE
@@ -151,6 +202,8 @@ func _on_state(id: int, state: int) -> void:
 		panne_lbl.modulate = COK
 	if id == _cur_system:
 		_refresh_panel()
+	# Mettre à jour la liste des pannes
+	_update_fail_panel()
 
 func _on_game_over(reason: String) -> void:
 	go_pnl.visible     = true
