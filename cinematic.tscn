@@ -29,7 +29,7 @@ height = 0.665
 script = ExtResource("1_oe414")
 
 [node name="CinematicCamera" type="Camera3D" parent="." unique_id=1798251328]
-transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -9.921288, -0.39157343, -0.063732624)
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -9.921288, -0.39157343, 0.42420793)
 
 [node name="LightMain" type="DirectionalLight3D" parent="." unique_id=1144936357]
 
@@ -307,7 +307,7 @@ transform = Transform3D(0.0019999917, 5.689888e-06, 0, -5.689888e-06, 0.00199999
 transform = Transform3D(1.631115, 0, 0, 0, 0.13590781, 0, 0, 0, 0.69320405, 6.6294146, -1.4761212, 12.309324)
 
 [node name="Sketchfab_Scene7" parent="." unique_id=488527934 instance=ExtResource("8_in5sc")]
-transform = Transform3D(-0.0043496313, -0.0004476521, -0.8642244, 0, 0.7543806, -0.00051284843, 0.8170982, -2.3829714e-06, -0.0046004965, -13.478957, -1.9103959, 0.5485477)
+transform = Transform3D(-0.0043496313, -0.0004476521, -0.8642244, 0, 0.7543806, -0.00051284843, 0.8170982, -2.3829714e-06, -0.0046004965, -7.7716017, -1.9103959, 0.5485477)
 
 [node name="Sketchfab_Scene8" parent="." unique_id=1263195601 instance=ExtResource("9_b33wg")]
 transform = Transform3D(0.012618203, 0.0017303245, -1.3045841e-05, -0.0013811707, 0.01580622, -0.0002378099, -1.0422468e-05, 0.00024055051, 0.015719986, -14.429374, -1.482486, 0.28283378)

@@ -19,9 +19,9 @@ func _process(delta: float) -> void:
 	_time += delta
 
 	# Plus fort !
-	var sway_x := sin(_time * 0.4) * 0.3 * _intensity
-	var sway_y := sin(_time * 0.6) * 0.2 * _intensity
-	var sway_z := sin(_time * 0.3) * 0.25 * _intensity
+	var sway_x := sin(_time * 0.4) * 0.03 * _intensity
+	var sway_y := sin(_time * 0.6) * 0.02 * _intensity
+	var sway_z := sin(_time * 0.3) * 0.025 * _intensity
 
 	# Tremblement rapide si CRITIQUE
 	if _intensity > 0.6:
