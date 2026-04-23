@@ -43,12 +43,20 @@ const LAUNCH_SEQUENCE := [
 	"Ouvrir les PORTES",
 ]
 
+# ── Constantes de timing ────────────────────────────────────
+const GAME_DURATION    := 120.0  # durée totale
+const FIRST_FAIL_DELAY := 15.0   # délai avant la première panne
+const FAIL_INTERVAL    := 20.0   # intervalle entre pannes
+const DEGRADE_TIME     := 12.0   # WARNING → CRITIQUE
+const CASCADE_TIME     := 15.0   # CRITIQUE → cascade sur voisins
+const MAX_ACTIVE_FAILS := 3      # jamais plus de 3 pannes simultanées
+
 var system_states   := { 0:0, 1:0, 2:0, 3:0, 4:0 }
-var game_timer      := 90.0
+var game_timer      := GAME_DURATION
 var _running        := false
 var _elapsed        := 0.0
 var _fail_timer     := 0.0
-var _fail_interval  := 7.0
+var _fail_interval  := FAIL_INTERVAL
 var _next_event     := 0
 var _cascade_timers := { 0:0.0, 1:0.0, 2:0.0, 3:0.0, 4:0.0 }
 var _degrade_timers := { 0:0.0, 1:0.0, 2:0.0, 3:0.0, 4:0.0 }
@@ -64,10 +72,10 @@ func _ready() -> void:
 
 func start_game() -> void:
 	_running       = true
-	game_timer     = 300.0
+	game_timer     = GAME_DURATION    # ← 120s
 	_elapsed       = 0.0
-	_fail_timer    = 10.0
-	_fail_interval = 15.0
+	_fail_timer    = FIRST_FAIL_DELAY # ← 15s avant la 1ère panne
+	_fail_interval = FAIL_INTERVAL    # ← 20s entre pannes
 	_next_event    = 0
 	_launch_active = false
 	_launch_step   = 0
@@ -76,8 +84,6 @@ func start_game() -> void:
 		_cascade_timers[s] = 0.0
 		_degrade_timers[s] = 0.0
 	emit_signal("failure_count_changed", 0)
-	
-	#_set_state(0, State.WARNING)  # 0 = VENTILATION
 
 func _process(delta: float) -> void:
 	if not _running: return
@@ -99,35 +105,46 @@ func _process(delta: float) -> void:
 		_end("TEMPS ECOULE")
 		return
 
+	# Événements narratifs
 	if _next_event < EVENTS.size() and _elapsed >= EVENTS[_next_event][0]:
 		emit_signal("event_triggered", EVENTS[_next_event][1])
 		if _next_event == 2: _spawn_fail(); _spawn_fail()
 		_next_event += 1
 
+	# Spawn de pannes périodiques
 	_fail_timer -= delta
 	if _fail_timer <= 0:
 		_spawn_fail()
 		_fail_timer    = _fail_interval
-		_fail_interval = maxf(_fail_interval - 0.4, 3.5)
+		_fail_interval = maxf(_fail_interval - 0.4, 5.0)
 
+	# Dégradation et cascades
 	for s in System.values():
 		if system_states[s] == State.WARNING:
 			_degrade_timers[s] += delta
-			if _degrade_timers[s] >= 8.0:
+			if _degrade_timers[s] >= DEGRADE_TIME:  # ← 12s
 				_degrade_timers[s] = 0.0
 				_set_state(s, State.CRITICAL)
 		elif system_states[s] == State.CRITICAL:
 			_cascade_timers[s] += delta
-			if _cascade_timers[s] >= 6.0:
+			if _cascade_timers[s] >= CASCADE_TIME:  # ← 15s
 				_cascade_timers[s] = 0.0
 				for n in CASCADES.get(s, []):
-					if system_states[n] == State.OK:
+					# FIX : ne cascade que si voisin OK et max non atteint
+					if system_states[n] == State.OK and _count_failing() < MAX_ACTIVE_FAILS:
 						_set_state(n, State.WARNING)
 		else:
 			_degrade_timers[s] = 0.0
 			_cascade_timers[s] = 0.0
 
+# ── Compte les systèmes non-OK ──────────────────────────────
+func _count_failing() -> int:
+	return system_states.values().filter(func(v): return v != State.OK).size()
+
+# ── Spawn une nouvelle panne ────────────────────────────────
 func _spawn_fail() -> void:
+	# FIX : bloque si max de pannes simultanées atteint
+	if _count_failing() >= MAX_ACTIVE_FAILS: return
 	var ok := system_states.keys().filter(func(k): return system_states[k] == State.OK)
 	if ok.is_empty(): return
 	ok.shuffle()
@@ -137,9 +154,10 @@ func _set_state(id: int, state: int) -> void:
 	if system_states[id] == state: return
 	system_states[id] = state
 	emit_signal("system_state_changed", id, state)
-	var fail := system_states.values().filter(func(v): return v != State.OK).size()
+	var fail := _count_failing()
 	emit_signal("failure_count_changed", fail)
-	if fail >= 4: _end("SURCHARGE TOTALE — 4 SYSTEMES EN PANNE")
+	if fail > MAX_ACTIVE_FAILS:
+		_end("SURCHARGE TOTALE — %d SYSTEMES EN PANNE" % fail)
 
 func repair_system(id: int) -> void:
 	if system_states[id] != State.OK:
@@ -173,7 +191,8 @@ func _end(reason: String) -> void:
 	_running = false
 	emit_signal("game_over", "CONTAMINATION — " + reason)
 
-func is_running()              -> bool: return _running
-func is_system_failing(id: int)-> bool: return system_states.get(id, 0) != State.OK
-func get_state(id: int)        -> int:  return system_states.get(id, State.OK)
-func is_launch_active()        -> bool: return _launch_active
+func is_running()               -> bool:  return _running
+func is_system_failing(id: int) -> bool:  return system_states.get(id, 0) != State.OK
+func get_state(id: int)         -> int:   return system_states.get(id, State.OK)
+func is_launch_active()         -> bool:  return _launch_active
+func get_elapsed()              -> float: return _elapsed  # ← nouveau, utile pour RepairSystems
