@@ -28,7 +28,7 @@ func _ready() -> void:
 	serial = GdSerial.new()
 	serial.set_baud_rate(BAUD_RATE)
 	serial.set_timeout(10)
-	start_pairing()
+	serial.set_port("COM8")
 	if serial.open():
 		_paired = true
 		_wasPaired = true
