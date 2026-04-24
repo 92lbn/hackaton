@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://ducved5vn37a6"
+path="res://.godot/imported/bruit-température.mp3-6f9c6f90f893b200378a52fc5a51172c.mp3str"
+
+[deps]
+
+source_file="res://Song hackaton/bruit-température.mp3"
+dest_files=["res://.godot/imported/bruit-température.mp3-6f9c6f90f893b200378a52fc5a51172c.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://qf0yh5c6usp8"
+path="res://.godot/imported/bruit-lumière-uv.mp3-773ef51e8c190ad5e7ebd1f5a65927d9.mp3str"
+
+[deps]
+
+source_file="res://Song hackaton/bruit-lumière-uv.mp3"
+dest_files=["res://.godot/imported/bruit-lumière-uv.mp3-773ef51e8c190ad5e7ebd1f5a65927d9.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
