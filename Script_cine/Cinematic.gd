@@ -20,6 +20,10 @@ signal cinematic_finished
 @onready var mushrooms:     Node3D         = $Mushrooms
 @onready var particles:     GPUParticles3D = $SporeParticles
 
+@onready var ambiance_cine: AudioStreamPlayer = $AmbianceCinematic
+@export var snd_intro: AudioStream
+@export var snd_contamination: AudioStream
+
 # Textes de la cinématique
 const TEXTS := [
 	["Jour 247.", 1.5],
@@ -68,6 +72,9 @@ func _start() -> void:
 # PHASE 1 — Calme, labo propre
 # ============================================================
 func _phase_calm() -> void:
+	if ambiance_cine and snd_intro:
+		ambiance_cine.stream = snd_intro
+		ambiance_cine.play()
 	text_panel.visible = true
 	await _type_texts(0, 3)  # Textes 0 à 3
 	await get_tree().create_timer(0.5).timeout
@@ -77,6 +84,7 @@ func _phase_calm() -> void:
 # PHASE 2 — Ça tourne mal
 # ============================================================
 func _phase_trouble() -> void:
+	
 	# Lumières qui vacillent
 	_flicker_lights()
 	await get_tree().create_timer(1.0).timeout
@@ -95,6 +103,9 @@ func _phase_trouble() -> void:
 # PHASE 3 — Contamination
 # ============================================================
 func _phase_contamination() -> void:
+	if ambiance_cine and snd_contamination:
+		ambiance_cine.stream = snd_contamination
+		ambiance_cine.play()
 	# Lumières vertes/violettes
 	var tween := create_tween().set_parallel(true)
 	tween.tween_property(light_main,   "light_color",  Color(0.1, 0.05, 0.1), 1.0)

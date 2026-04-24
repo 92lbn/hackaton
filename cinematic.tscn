@@ -1,8 +1,10 @@
 [gd_scene format=3 uid="uid://bipv7xhdq3w0k"]
 
 [ext_resource type="Script" uid="uid://0p1rqw0tvmfr" path="res://Script_cine/Cinematic.gd" id="1_oe414"]
+[ext_resource type="AudioStream" uid="uid://60jypkolbkyq" path="res://Song hackaton/CMPTKey_Clavier d ordinateur (ID 0229)_LaSonotheque.fr.mp3" id="2_c824v"]
 [ext_resource type="PackedScene" uid="uid://bvsgkrdf5nfid" path="res://Assets/map/extraction_room.glb" id="2_qulof"]
 [ext_resource type="PackedScene" uid="uid://ds7ttce1ggu4x" path="res://Model/centrifugal_pump__bomba_centrifuga.glb" id="3_2rcj5"]
+[ext_resource type="AudioStream" uid="uid://bpux3ied0mgev" path="res://Song hackaton/alarme-son1.mp3" id="3_ge1lf"]
 [ext_resource type="PackedScene" uid="uid://b77uebae14tbg" path="res://Model/Lumières UV.glb" id="4_x6e0r"]
 [ext_resource type="PackedScene" uid="uid://dpj47lhn6jcet" path="res://Model/Pression.glb" id="6_b33wg"]
 [ext_resource type="PackedScene" uid="uid://c6fmtx1lrum8o" path="res://Model/Ventilation.glb" id="7_c824v"]
@@ -27,6 +29,8 @@ height = 0.665
 
 [node name="Cinematic" type="Node3D" unique_id=1833732185]
 script = ExtResource("1_oe414")
+snd_intro = ExtResource("2_c824v")
+snd_contamination = ExtResource("3_ge1lf")
 
 [node name="CinematicCamera" type="Camera3D" parent="." unique_id=1798251328]
 transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -9.921288, -0.39157343, 0.42420793)

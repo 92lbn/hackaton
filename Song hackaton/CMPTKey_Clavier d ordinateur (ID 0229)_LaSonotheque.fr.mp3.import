@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://60jypkolbkyq"
+path="res://.godot/imported/CMPTKey_Clavier d ordinateur (ID 0229)_LaSonotheque.fr.mp3-ec93c24199d6dfcc7839e6353cfb0537.mp3str"
+
+[deps]
+
+source_file="res://Song hackaton/CMPTKey_Clavier d ordinateur (ID 0229)_LaSonotheque.fr.mp3"
+dest_files=["res://.godot/imported/CMPTKey_Clavier d ordinateur (ID 0229)_LaSonotheque.fr.mp3-ec93c24199d6dfcc7839e6353cfb0537.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
