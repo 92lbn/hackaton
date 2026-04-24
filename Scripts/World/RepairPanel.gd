@@ -1,13 +1,15 @@
 # ============================================================
 # RepairPanel.gd
 # Nœud : Area3D
-# Enfants : MeshInstance3D, CollisionShape3D, SpotLight3D
+# Enfants : MeshInstance3D, CollisionShape3D, SpotLight3D, AudioStreamPlayer3D
 # ============================================================
 extends Area3D
+
 @export var system_id: int = 0
 
-@onready var light: SpotLight3D = get_node_or_null("SpotLight3D")
-@onready var mesh:  MeshInstance3D = get_node_or_null("MeshInstance3D")
+@onready var light: SpotLight3D          = get_node_or_null("SpotLight3D")
+@onready var mesh:  MeshInstance3D       = get_node_or_null("MeshInstance3D")
+@onready var audio: AudioStreamPlayer3D  = get_node_or_null("AudioStreamPlayer3D")
 
 func _ready() -> void:
 	connect("body_entered", _on_enter)
@@ -26,11 +28,18 @@ func _on_exit(body: Node3D) -> void:
 		if hud: hud.hide_panel()
 
 func _on_state(id: int, state: int) -> void:
-	if id == system_id: _update_light(state)
+	if id != system_id: return
+	_update_light(state)
+	if not audio: return
+	match state:
+		GameManager.State.WARNING, GameManager.State.CRITICAL:
+			if not audio.playing: audio.play()
+		GameManager.State.OK:
+			audio.stop()
 
 func _update_light(state: int) -> void:
 	if not light: return
 	match state:
-		GameManager.State.OK:       light.light_color = Color(0, 1, 0.3);  light.light_energy = 1.0
-		GameManager.State.WARNING:  light.light_color = Color(1, 0.6, 0);  light.light_energy = 2.5
-		GameManager.State.CRITICAL: light.light_color = Color(1, 0.1, 0.1);light.light_energy = 4.0
+		GameManager.State.OK:       light.light_color = Color(0, 1, 0.3);   light.light_energy = 1.0
+		GameManager.State.WARNING:  light.light_color = Color(1, 0.6, 0);   light.light_energy = 2.5
+		GameManager.State.CRITICAL: light.light_color = Color(1, 0.1, 0.1); light.light_energy = 4.0
