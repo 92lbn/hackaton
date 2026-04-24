@@ -319,4 +319,6 @@ transform = Transform3D(0.012618203, 0.0017303245, -1.3045841e-05, -0.0013811707
 [node name="SaS" parent="." unique_id=1398944511 instance=ExtResource("9_in5sc")]
 transform = Transform3D(0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, -2.7292166, -2.5273433, 4.762249)
 
+[node name="AmbianceCinematic" type="AudioStreamPlayer" parent="." unique_id=1968750602]
+
 [connection signal="pressed" from="HUD/StartPanel/StartButton" to="." method="_on_start_pressed"]
