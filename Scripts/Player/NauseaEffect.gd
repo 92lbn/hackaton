@@ -25,9 +25,9 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if _intensity <= 0.0: return
 	_time += delta
-	var sway_x := sin(_time * 0.4) * 0.03 * _intensity
-	var sway_y := sin(_time * 0.6) * 0.02 * _intensity
-	var sway_z := sin(_time * 0.3) * 0.025 * _intensity
+	var sway_x := sin(_time * 0.4) * 0.3 * _intensity
+	var sway_y := sin(_time * 0.6) * 0.2 * _intensity
+	var sway_z := sin(_time * 0.3) * 0.25 * _intensity
 	if _intensity > 0.6:
 		sway_x += sin(_time * 8.0) * 0.015 * _intensity
 		sway_y += cos(_time * 9.0) * 0.01 * _intensity

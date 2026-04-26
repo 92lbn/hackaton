@@ -87,15 +87,18 @@ func start_game() -> void:
 
 func _process(delta: float) -> void:
 	if not _running: return
-	game_timer -= delta
-	_elapsed   += delta
-	emit_signal("timer_updated", game_timer)
-
+	
 	if _launch_active:
 		_launch_timer += delta
 		if _launch_timer >= 4.0:
 			_end("SEQUENCE DE LANCEMENT ECHOUEE")
 		return
+		
+	game_timer -= delta
+	_elapsed   += delta
+	emit_signal("timer_updated", game_timer)
+
+	
 
 	if game_timer <= 15.0 and not _launch_active:
 		_start_launch()
